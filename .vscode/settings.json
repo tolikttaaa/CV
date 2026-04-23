@@ -1,0 +1,22 @@
+{
+  "latex-workshop.latex.tools": [
+    {
+      "name": "lualatex",
+      "command": "/Library/TeX/texbin/lualatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "lualatex",
+      "tools": ["lualatex"]
+    }
+  ],
+  "latex-workshop.latex.autoBuild.run": "onSave"
+}
