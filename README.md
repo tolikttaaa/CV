@@ -18,7 +18,9 @@ LaTeX CV with automatic compilation and deployment to GitHub Pages via GitHub Ac
 │       ├── teaching.tex
 │       ├── education.tex
 │       └── references.tex
-├── index.html                  # GitHub Pages landing page
+├── web/
+│   ├── index.html              # GitHub Pages landing page
+│   └── favicon.png             # Site icon
 └── .github/workflows/
     └── build-deploy.yml        # Compile → deploy pipeline
 ```
@@ -39,6 +41,6 @@ The compiled PDF is written to `latex/cv.pdf`.
 Every push to `main` triggers the GitHub Actions workflow:
 
 1. Compiles `latex/cv.tex` with LuaLaTeX inside a full TeX Live container
-2. Pushes `cv.pdf` + `index.html` to the `gh-pages` branch
+2. Pushes `web/` contents + compiled `cv.pdf` to the `gh-pages` branch
 
 GitHub Pages serves the result from the `gh-pages` branch (`/ root`).

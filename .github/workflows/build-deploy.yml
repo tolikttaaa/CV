@@ -28,9 +28,8 @@ jobs:
 
       - name: Prepare Pages content
         run: |
-          mkdir _site
+          cp -r web _site
           cp latex/cv.pdf _site/cv.pdf
-          cp index.html _site/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
