@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anatolii Anishchenko — CV</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background: #000066;
+      color: #fff;
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      gap: 1rem;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; }
+    header p  { font-size: 0.78rem; opacity: 0.7; margin-top: 0.1rem; }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .zoom-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: #fff;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 4px;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .zoom-btn:hover:not(:disabled) { background: rgba(255,255,255,0.28); }
+    .zoom-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .zoom-label {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      min-width: 3rem;
+      text-align: center;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #fff;
+      color: #000066;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 0.45rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-left: 0.5rem;
+      transition: opacity 0.15s;
+    }
+    .download-btn:hover { opacity: 0.85; }
+
+    #viewer-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pdf-page {
+      display: block;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .pdf-page:last-child { margin-bottom: 0; }
+
+    #loading {
+      color: #666;
+      font-size: 0.9rem;
+      padding: 3rem;
+    }
+
+    footer {
+      flex-shrink: 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #666;
+      padding: 0.6rem;
+      background: #f0f0f0;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Anatolii Anishchenko</h1>
+      <p>Java / Kotlin Software Engineer</p>
+    </div>
+    <div class="controls">
+      <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+      <span class="zoom-label" id="zoom-label">100%</span>
+      <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+      <a class="download-btn" href="cv.pdf" download="AnishchenkoAA_CV.pdf">&#8595; Download</a>
+    </div>
+  </header>
+
+  <div id="viewer-container">
+    <span id="loading">Loading…</span>
+  </div>
+
+  <footer>
+    Auto-compiled from source via GitHub Actions &amp; deployed to GitHub Pages.
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    const pdfjsLib = window['pdfjs-dist/build/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const ZOOM_STEPS  = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+    const ZOOM_LABELS = ['50%', '75%', '100%', '125%', '150%', '200%'];
+    let zoomIndex = 2;
+    let pdfDoc   = null;
+    let fitScale = 1;
+
+    const container  = document.getElementById('viewer-container');
+    const zoomInBtn  = document.getElementById('zoom-in');
+    const zoomOutBtn = document.getElementById('zoom-out');
+    const zoomLabel  = document.getElementById('zoom-label');
+
+    async function renderPage(page, scale) {
+      const dpr      = window.devicePixelRatio || 1;
+      const viewport = page.getViewport({ scale: scale * dpr });
+      const canvas   = document.createElement('canvas');
+      canvas.className   = 'pdf-page';
+      canvas.width       = viewport.width;
+      canvas.height      = viewport.height;
+      canvas.style.width  = `${viewport.width  / dpr}px`;
+      canvas.style.height = `${viewport.height / dpr}px`;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+      return canvas;
+    }
+
+    async function renderAll() {
+      const scale = fitScale * ZOOM_STEPS[zoomIndex];
+      container.innerHTML = '';
+      for (let i = 1; i <= pdfDoc.numPages; i++) {
+        const page = await pdfDoc.getPage(i);
+        container.appendChild(await renderPage(page, scale));
+      }
+      zoomLabel.textContent  = ZOOM_LABELS[zoomIndex];
+      zoomInBtn.disabled  = zoomIndex >= ZOOM_STEPS.length - 1;
+      zoomOutBtn.disabled = zoomIndex <= 0;
+    }
+
+    async function init() {
+      pdfDoc = await pdfjsLib.getDocument('cv.pdf').promise;
+      const firstPage  = await pdfDoc.getPage(1);
+      const naturalWidth = firstPage.getViewport({ scale: 1 }).width;
+      fitScale = (container.clientWidth - 48) / naturalWidth;
+      await renderAll();
+    }
+
+    zoomInBtn.addEventListener('click',  () => { if (zoomIndex < ZOOM_STEPS.length - 1) { zoomIndex++; renderAll(); } });
+    zoomOutBtn.addEventListener('click', () => { if (zoomIndex > 0)                     { zoomIndex--; renderAll(); } });
+
+    init().catch(err => {
+      container.innerHTML = `<p style="color:#c00;padding:2rem">Failed to load CV: ${err.message}</p>`;
+    });
+  </script>
+
+</body>
+</html>
