@@ -25,12 +25,13 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: cv.tex
+          working_directory: latex
           latexmk_use_lualatex: true
 
       - name: Prepare Pages artifact
         run: |
           mkdir _site
-          cp cv.pdf _site/cv.pdf
+          cp latex/cv.pdf _site/cv.pdf
           cp index.html _site/index.html
 
       - name: Upload Pages artifact
