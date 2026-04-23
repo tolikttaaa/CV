@@ -84,11 +84,23 @@
     }
 
     .pdf-page {
+      position: relative;
       display: block;
       margin-bottom: 1rem;
       box-shadow: 0 2px 12px rgba(0,0,0,0.25);
     }
     .pdf-page:last-child { margin-bottom: 0; }
+    .pdf-page canvas { display: block; }
+
+    .pdf-page .links {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .pdf-page .links a {
+      position: absolute;
+      cursor: pointer;
+    }
 
     #loading {
       color: #666;
@@ -148,16 +160,44 @@
     const zoomLabel  = document.getElementById('zoom-label');
 
     async function renderPage(page, scale) {
-      const dpr      = window.devicePixelRatio || 1;
-      const viewport = page.getViewport({ scale: scale * dpr });
-      const canvas   = document.createElement('canvas');
-      canvas.className   = 'pdf-page';
-      canvas.width       = viewport.width;
-      canvas.height      = viewport.height;
-      canvas.style.width  = `${viewport.width  / dpr}px`;
-      canvas.style.height = `${viewport.height / dpr}px`;
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-      return canvas;
+      const dpr        = window.devicePixelRatio || 1;
+      const cssVp      = page.getViewport({ scale });
+      const hqVp       = page.getViewport({ scale: scale * dpr });
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'pdf-page';
+      wrapper.style.width  = `${cssVp.width}px`;
+      wrapper.style.height = `${cssVp.height}px`;
+
+      const canvas = document.createElement('canvas');
+      canvas.width        = hqVp.width;
+      canvas.height       = hqVp.height;
+      canvas.style.width  = `${cssVp.width}px`;
+      canvas.style.height = `${cssVp.height}px`;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport: hqVp }).promise;
+      wrapper.appendChild(canvas);
+
+      const annotations = await page.getAnnotations();
+      const linkAnnotations = annotations.filter(a => a.subtype === 'Link' && a.url);
+      if (linkAnnotations.length) {
+        const linkLayer = document.createElement('div');
+        linkLayer.className = 'links';
+        for (const ann of linkAnnotations) {
+          const [x1, y1, x2, y2] = cssVp.convertToViewportRectangle(ann.rect);
+          const a = document.createElement('a');
+          a.href   = ann.url;
+          a.target = '_blank';
+          a.rel    = 'noopener noreferrer';
+          a.style.left   = `${Math.min(x1, x2)}px`;
+          a.style.top    = `${Math.min(y1, y2)}px`;
+          a.style.width  = `${Math.abs(x2 - x1)}px`;
+          a.style.height = `${Math.abs(y2 - y1)}px`;
+          linkLayer.appendChild(a);
+        }
+        wrapper.appendChild(linkLayer);
+      }
+
+      return wrapper;
     }
 
     async function renderAll() {
