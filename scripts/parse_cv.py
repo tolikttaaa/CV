@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Parse LaTeX CV sources → web/cv-data.json"""
+"""Parse LaTeX CV sources → build/cv-data.json"""
 
 import json, os, re
 
 REPO  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LATEX = os.path.join(REPO, 'latex')
-OUT   = os.path.join(REPO, 'web', 'cv-data.json')
+OUT   = os.path.join(REPO, 'build', 'cv-data.json')
 
 
 def read(name):
@@ -301,6 +301,7 @@ def build():
         ],
     }
 
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     print(f'Wrote {OUT}')

@@ -48,16 +48,30 @@ a { color: var(--primary-mid); }
   z-index: 10;
 }
 
+.h-left {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-width: 0;
+}
+
+.h-identity { min-width: 0; }
 .h-identity h1 {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: .02em;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .h-identity p {
   font-size: .72rem;
   opacity: .7;
   margin-top: .1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .view-toggle {
@@ -160,6 +174,19 @@ a { color: var(--primary-mid); }
 }
 .download-btn:hover { opacity: .85; }
 
+@media (max-width: 560px) {
+  #h-tagline { display: none; }
+  .toggle-btn { padding: .28rem .6rem; }
+  .download-btn { padding: .38rem .55rem; }
+  .download-btn .btn-label { display: none; }
+  /* pinch/browser zoom is available on touch devices */
+  #zoom-controls { display: none !important; }
+}
+
+@media (max-width: 340px) {
+  .h-identity { display: none; }
+}
+
 /* ── View panels ──────────────────────────────────────────────────────── */
 .view-panel {
   flex: 1;
@@ -209,7 +236,13 @@ a { color: var(--primary-mid); }
 }
 
 
-@media (max-width: 768px) {
+/* sidebar collapses at 900px: below that the 2-column summary can't fit
+   the full-size photo plus a usable contacts column next to it */
+@media (max-width: 900px) {
+  #app-header { padding: 0 .75rem; gap: .6rem; }
+  /* never let the identity area shrink under the menu button, or it
+     overlaps the view toggle on ultra-narrow screens */
+  .h-left { min-width: 2rem; }
   .menu-btn { display: flex; }
   #sidebar {
     position: fixed;
@@ -303,7 +336,16 @@ a { color: var(--primary-mid); }
   color: var(--primary);
 }
 .nav-btn:disabled { opacity: .3; cursor: default; }
-.nav-indicator { font-size: .78rem; color: var(--text-2); text-align: center; flex: 1; }
+.nav-indicator {
+  font-size: .78rem;
+  color: var(--text-2);
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* ── Section content ──────────────────────────────────────────────────── */
 .sec-title {
@@ -339,18 +381,6 @@ a { color: var(--primary-mid); }
   grid-template-columns: 230px 1fr auto;
   gap: 1.75rem;
   align-items: start;
-}
-@media (max-width: 1050px) {
-  .summary-grid { grid-template-columns: 1fr 1fr; }
-  .contact-list  { order: 1; }
-  .summary-photo { order: 2; width: 100%; height: auto; }
-  .summary-box   { order: 3; grid-column: 1 / -1; }
-}
-@media (max-width: 660px) {
-  .summary-grid { grid-template-columns: 1fr; }
-  .summary-photo { order: 1; grid-column: auto; width: 100%; height: auto; }
-  .contact-list  { order: 2; height: auto; }
-  .summary-box   { order: 3; grid-column: auto; }
 }
 .summary-box {
   background: var(--card);
@@ -527,6 +557,9 @@ a { color: var(--primary-mid); }
 .contact-item:last-child { border-bottom: none; }
 a.contact-item:hover { background: var(--primary-light); color: var(--primary); }
 .contact-item i { width: 22px; text-align: center; color: var(--primary); font-size: 1.1rem; flex-shrink: 0; }
+/* emails/URLs are single unbreakable tokens: wrap them rather than
+   letting the card's overflow:hidden clip them */
+.contact-item span { min-width: 0; overflow-wrap: anywhere; }
 
 /* footer */
 footer {
@@ -537,4 +570,53 @@ footer {
   padding: .45rem;
   background: var(--card);
   border-top: 1px solid var(--border);
+}
+
+/* ── Narrow-screen content adjustments ────────────────────────────────── */
+/* kept at the end of the file: these override base rules of equal
+   specificity, so they must come after them in source order */
+/* 2-column summary: the 3-column layout squeezes the text into a sliver
+   below ~1250px window width once the 252px sidebar is accounted for.
+   The photo keeps its natural desktop size (320px tall, never cropped or
+   scaled down) and the contacts card keeps its matching 320px height;
+   only the summary text moves below. The sidebar collapses at 900px so
+   the contacts column always has enough room next to the photo. */
+@media (max-width: 1250px) {
+  .summary-grid { grid-template-columns: minmax(0, 1fr) auto; }
+  .contact-list  { order: 1; }
+  .summary-photo { order: 2; }
+  .summary-box   { order: 3; grid-column: 1 / -1; }
+}
+
+/* single-column summary on phones */
+@media (max-width: 660px) {
+  .summary-grid { grid-template-columns: 1fr; align-items: start; }
+  .summary-photo { order: 1; grid-column: auto; width: 100%; max-width: 340px; height: auto; justify-self: center; }
+  .contact-list  { order: 2; height: auto; }
+  .summary-box   { order: 3; grid-column: auto; }
+}
+
+
+@media (max-width: 560px) {
+  #section-display { padding: 1.25rem 1rem 1rem; }
+  #section-nav-bar { padding: 0 1rem; }
+  .sec-title { font-size: 1.15rem; }
+
+  /* justified text produces ugly rivers in narrow columns */
+  .summary-box, .work-desc, .edu-desc { text-align: left; }
+
+  /* stack card headers: nowrap dates otherwise overflow the card
+     or crush the role title into one word per line */
+  .work-header, .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .15rem;
+  }
+  .work-dates { white-space: normal; padding-top: 0; }
+
+  /* stack fixed label columns that crush the value column */
+  .skill-row { grid-template-columns: 1fr; gap: .25rem; }
+  .skill-cat { text-align: left; }
+  .edu-entry { grid-template-columns: 1fr; gap: .25rem; }
+  .edu-years { text-align: left; }
 }

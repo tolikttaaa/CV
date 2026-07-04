@@ -21,6 +21,12 @@ LaTeX CV with automatic compilation and deployment to GitHub Pages via GitHub Ac
 ├── web/
 │   ├── index.html              # GitHub Pages landing page
 │   └── favicon.png             # Site icon
+├── scripts/
+│   └── parse_cv.py             # LaTeX → build/cv-data.json portfolio data
+├── build/                      # All build output (gitignored)
+│   ├── cv.pdf                  # Compiled CV + LaTeX artifacts
+│   ├── cv-data.json            # Generated portfolio data
+│   └── site/                   # Assembled site (deployed to Pages)
 └── .github/workflows/
     └── build-deploy.yml        # Compile → deploy pipeline
 ```
@@ -30,17 +36,19 @@ LaTeX CV with automatic compilation and deployment to GitHub Pages via GitHub Ac
 Requires LuaLaTeX (TeX Live 2022+).
 
 ```sh
-cd latex
-lualatex cv.tex
+mkdir -p build
+(cd latex && lualatex -output-directory=../build cv.tex)
+python3 scripts/parse_cv.py
 ```
 
-The compiled PDF is written to `latex/cv.pdf`.
+The compiled PDF and all other artifacts are written to `build/`.
 
 ## Deployment
 
 Every push to `main` triggers the GitHub Actions workflow:
 
 1. Compiles `latex/cv.tex` with LuaLaTeX inside a full TeX Live container
-2. Pushes `web/` contents + compiled `cv.pdf` to the `gh-pages` branch
+2. Generates portfolio data and assembles the site into `build/site`
+3. Pushes `build/site` to the `gh-pages` branch
 
 GitHub Pages serves the result from the `gh-pages` branch (`/ root`).

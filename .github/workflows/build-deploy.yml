@@ -31,12 +31,13 @@ jobs:
 
       - name: Prepare Pages content
         run: |
-          cp -r web _site
-          cp latex/cv.pdf  _site/cv.pdf
-          cp latex/photo.jpg _site/photo.jpg
+          cp -r web build/site
+          cp latex/cv.pdf build/site/cv.pdf
+          cp latex/photo.jpg build/site/photo.jpg
+          cp build/cv-data.json build/site/cv-data.json
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          publish_dir: ./build/site

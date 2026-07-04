@@ -1,17 +1,22 @@
-Compile the CV LaTeX source to PDF and regenerate the portfolio JSON data.
+Compile the CV LaTeX source to PDF and regenerate the portfolio JSON data. All artifacts go to the `build/` directory.
 
-Run these commands from the project root sequentially:
+Run these commands sequentially:
 
-1. Compile with LuaLaTeX (run twice for stable output):
+1. Ensure the build directory exists:
 ```
-/Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=/Users/ttaaa/Projects/Personal/CV /Users/ttaaa/Projects/Personal/CV/latex/cv.tex
+mkdir -p /Users/ttaaa/Projects/Personal/CV/build
+```
+
+2. Compile with LuaLaTeX from the latex/ directory so the local class file resolves (run twice for stable output):
+```
+cd /Users/ttaaa/Projects/Personal/CV/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=../build cv.tex
 ```
 Run it a second time to resolve cross-references:
 ```
-/Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=/Users/ttaaa/Projects/Personal/CV /Users/ttaaa/Projects/Personal/CV/latex/cv.tex
+cd /Users/ttaaa/Projects/Personal/CV/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=../build cv.tex
 ```
 
-2. Regenerate portfolio data:
+3. Regenerate portfolio data (writes build/cv-data.json):
 ```
 python3 /Users/ttaaa/Projects/Personal/CV/scripts/parse_cv.py
 ```
