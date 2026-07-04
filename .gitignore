@@ -16,5 +16,8 @@
 cv.pdf
 latex/cv.pdf
 
+# Generated portfolio data (built by CI)
+web/cv-data.json
+
 # macOS
 .DS_Store

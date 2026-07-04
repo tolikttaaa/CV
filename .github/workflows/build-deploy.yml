@@ -26,10 +26,14 @@ jobs:
           working_directory: latex
           latexmk_use_lualatex: true
 
+      - name: Generate portfolio data
+        run: python3 scripts/parse_cv.py
+
       - name: Prepare Pages content
         run: |
           cp -r web _site
-          cp latex/cv.pdf _site/cv.pdf
+          cp latex/cv.pdf  _site/cv.pdf
+          cp latex/photo.jpg _site/photo.jpg
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
