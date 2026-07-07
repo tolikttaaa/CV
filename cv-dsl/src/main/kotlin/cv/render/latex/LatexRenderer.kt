@@ -41,7 +41,7 @@ object LatexRenderer {
     // ── Root document ─────────────────────────────────────────────────────────
 
     private fun rootDocument(cv: Cv): String = buildString {
-        appendLine("""\documentclass[localFont,alternative]{documentMETADATA}""")
+        appendLine("""\documentclass[localFont,alternative]{cvdsl}""")
         if (!cv.hyphenation) {
             // Forbid hyphenation document-wide; emergencystretch lets justified
             // lines breathe instead of overflowing once words must stay whole.
@@ -59,8 +59,10 @@ object LatexRenderer {
         appendLine()
         appendLine("""}""")
         appendLine()
-        appendLine("""\photo{${cv.photoSize}}{${cv.photo}}""")
-        appendLine()
+        cv.photo?.let { photo ->
+            appendLine("""\photo{${photo.size}}{${photo.file}}""")
+            appendLine()
+        }
         appendLine("""\begin{document}""")
         appendLine("""    \makecvheader""")
         appendLine("""    \makecvfooter{}{\textsc{${escape(cv.footerText)}}}{\thepage}""")
@@ -126,7 +128,7 @@ object LatexRenderer {
                     appendLine("""    \referee""")
                     appendLine("""        {${escape(r.name)}}""")
                     appendLine("""        {${escape(r.role)}}""")
-                    appendLine("""        {${escape(r.company.name)}} {${escape(r.period)}}""")
+                    appendLine("""        {${refereeCompany(r.company)}} {${escape(r.period)}}""")
                     appendLine("""        {${escape(r.email)}}""")
                 }
                 appendLine("""\end{referees}""")
@@ -146,8 +148,8 @@ object LatexRenderer {
     private fun project(p: Project): String = buildString {
         appendLine("""    \project""")
         appendLine("""        {${escape(p.name)}}""")
-        appendLine("""        {${company(p.company)}${p.location?.let { ", ${escape(it)}" } ?: ""}}""")
-        appendLine("""        {${escape(p.year)}}""")
+        appendLine("""        {${company(p.company)}}""")
+        appendLine("""        {${escape(p.dates)}}""")
         appendLine("""        {""")
         append(blocks(p.description, indent = 3))
         appendLine("""        }""")
@@ -159,6 +161,10 @@ object LatexRenderer {
         val name = """\textbf{${escape(c.name)}}"""
         return if (c.url != null) """\link{${LatexText.escapeUrl(c.url)}}{$name}""" else name
     }
+
+    /** Renders a referee's company: linked when a URL is present, but not bold — the referee block stays compact. */
+    private fun refereeCompany(c: Organization): String =
+        if (c.url != null) """\link{${LatexText.escapeUrl(c.url)}}{${escape(c.name)}}""" else escape(c.name)
 
     // ── Block content ─────────────────────────────────────────────────────────
 

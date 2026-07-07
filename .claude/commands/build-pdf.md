@@ -1,19 +1,13 @@
-Generate the CV artifacts from the Kotlin DSL, then compile the PDF. All artifacts go to the `build/` directory.
+Generate the CV artifacts from the Kotlin DSL and compile the PDF. All artifacts go to the `build/` directory.
 
-Run these commands sequentially:
+Run:
 
-1. Generate LaTeX sources (build/latex) and portfolio data (build/cv-data.json) from the Kotlin DSL:
 ```
-cd /Users/ttaaa/Projects/Personal/CV && ./gradlew run
-```
-
-2. Compile with LuaLaTeX from build/latex so the local class file resolves (run twice for stable output):
-```
-cd /Users/ttaaa/Projects/Personal/CV/build/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=.. cv.tex
-```
-Run it a second time to resolve cross-references:
-```
-cd /Users/ttaaa/Projects/Personal/CV/build/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=.. cv.tex
+cd /Users/ttaaa/Projects/Personal/CV && ./gradlew generatePdf
 ```
 
-Report success or any errors from the Gradle run or the LaTeX compilation log.
+This runs the `generateLatex` task (Kotlin DSL → build/latex) and compiles with two LuaLaTeX passes → build/cv.pdf. The LuaLaTeX output is captured in build/lualatex.log.
+
+To also regenerate the web data, run `./gradlew generateWeb`, or `./gradlew run` for both.
+
+Report success or any errors (check build/lualatex.log on compilation failure).

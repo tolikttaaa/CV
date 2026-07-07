@@ -5,7 +5,7 @@ package cv.model
  *
  * Each variant knows only its raw value (a handle, a number, …); the renderers
  * derive the presentation from the type — the LaTeX renderer maps each variant
- * to the matching `documentMETADATA.cls` command (`\smartphone`, `\telegram`, …)
+ * to the matching `cvdsl.cls` command (`\smartphone`, `\telegram`, …)
  * and the web renderer derives the icon, the display text, and the target URL.
  */
 sealed interface Social {

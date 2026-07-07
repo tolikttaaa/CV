@@ -1,6 +1,17 @@
 package cv.model
 
 /**
+ * The profile photo of the CV header.
+ *
+ * @property file File name of the image, relative to the LaTeX build directory.
+ * @property size Rendered photo width as a LaTeX length, e.g. `"2.2cm"`.
+ */
+data class Photo(
+    val file: String,
+    val size: String,
+)
+
+/**
  * The complete, immutable CV document — the root of the model tree.
  *
  * Instances are produced by the `cv { … }` DSL (see `cv.dsl.CvBuilder`) and
@@ -10,8 +21,7 @@ package cv.model
  * @property firstName Given name in display case (the LaTeX renderer uppercases it for the header).
  * @property lastName Family name in display case.
  * @property tagline Short professional title shown under the name.
- * @property photo File name of the profile photo, relative to the LaTeX build directory.
- * @property photoSize Photo diameter as a LaTeX length, e.g. `"2.2cm"`.
+ * @property photo Profile photo; `null` renders the header without one.
  * @property footerText Text placed in the page footer of the PDF.
  * @property hyphenation Whether the PDF may hyphenate words across lines.
  *   When `false`, words always move to the next line whole — a document-wide
@@ -24,8 +34,7 @@ data class Cv(
     val firstName: String,
     val lastName: String,
     val tagline: String,
-    val photo: String,
-    val photoSize: String,
+    val photo: Photo?,
     val footerText: String,
     val hyphenation: Boolean,
     val social: List<List<Social>>,

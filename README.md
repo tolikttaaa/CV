@@ -28,7 +28,7 @@ CV described with a Kotlin DSL — the single source of truth — rendered to a 
 │       │           ├── WebRenderer.kt # Schema consumed by web/portfolio.js
 │       │           ├── HtmlText.kt #   Inline markup → HTML fragments
 │       │           └── JsonWriter.kt # Minimal dependency-free JSON writer
-│       └── resources/…/template/   # Bundled documentMETADATA.cls + fonts
+│       └── resources/…/template/   # Bundled cvdsl.cls + fonts
 ├── my-cv/                          # Module 2: the actual CV (depends on :cv-dsl)
 │   └── src/main/
 │       ├── resources/photo.jpg     # Profile photo
@@ -80,12 +80,14 @@ Available styles: `bold`, `italic`, `nowrap` (keep on one line), `colored(CvColo
 Requires JDK 21+ and LuaLaTeX (TeX Live 2022+).
 
 ```sh
-# 1. Generate LaTeX sources (build/latex) and portfolio data (build/cv-data.json)
-./gradlew run
-
-# 2. Compile the PDF (build/cv.pdf)
-(cd build/latex && lualatex -output-directory=.. cv.tex)
+./gradlew generatePdf     # Kotlin DSL → build/latex → build/cv.pdf (LuaLaTeX, 2 passes)
+./gradlew generateWeb     # Kotlin DSL → build/cv-data.json
+./gradlew assembleSite    # complete web page bundle → build/site
+./gradlew serveSite       # all of the above + dev server at http://localhost:8080
+./gradlew stopSite        # stop the dev server
 ```
+
+If LuaLaTeX is not at `/Library/TeX/texbin/lualatex` or on `PATH`, pass `-PlualatexPath=/path/to/lualatex`.
 
 ## Deployment
 

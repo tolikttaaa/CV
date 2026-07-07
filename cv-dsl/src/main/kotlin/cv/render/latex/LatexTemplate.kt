@@ -5,7 +5,7 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
 /**
- * The LaTeX template bundled with the library: the `documentMETADATA.cls`
+ * The LaTeX template bundled with the library: the `cvdsl.cls`
  * document class (whose commands — `\work`, `\keywordsentry`, `\educationentry`,
  * … — [LatexRenderer] targets) and the Source Sans Pro font files it loads
  * with the `localFont` option.
@@ -23,7 +23,7 @@ internal object LatexTemplate {
      * directory. Kept as an explicit list because classpath directories
      * cannot be enumerated portably (directory vs. jar packaging).
      */
-    private val FILES = listOf("documentMETADATA.cls") + listOf(
+    private val FILES = listOf("cvdsl.cls") + listOf(
         "Black", "BlackIt", "Bold", "BoldIt", "ExtraLight", "ExtraLightIt",
         "It", "Light", "LightIt", "Regular", "Semibold", "SemiboldIt",
     ).map { "fonts/SourceSansPro-$it.otf" }

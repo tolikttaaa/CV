@@ -2,6 +2,7 @@ package cv.dsl
 
 import cv.model.Cv
 import cv.model.EducationSection
+import cv.model.Photo
 import cv.model.ProjectsSection
 import cv.model.ReferencesSection
 import cv.model.Section
@@ -34,12 +35,6 @@ class CvBuilder {
     /** Short professional title shown under the name. */
     var tagline: String = ""
 
-    /** File name of the profile photo, relative to the LaTeX build directory. */
-    var photo: String = "photo.jpg"
-
-    /** Photo diameter as a LaTeX length. */
-    var photoSize: String = "2.2cm"
-
     /** Text placed in the page footer of the PDF. */
     var footerText: String = ""
 
@@ -50,8 +45,20 @@ class CvBuilder {
      */
     var hyphenation: Boolean = true
 
+    private var photo: Photo? = null
     private var social: List<List<Social>> = emptyList()
     private val sections = mutableListOf<Section>()
+
+    /**
+     * Adds a profile photo to the header. Optional — without this call the
+     * header is rendered without a photo.
+     *
+     * @param file Image file name, relative to the LaTeX build directory.
+     * @param size Rendered photo width as a LaTeX length.
+     */
+    fun photo(file: String, size: String = "2.2cm") {
+        photo = Photo(file, size)
+    }
 
     /** Defines the contact block of the header as rows of entries. */
     fun social(block: SocialBuilder.() -> Unit) {
@@ -130,7 +137,6 @@ class CvBuilder {
         lastName = lastName,
         tagline = tagline,
         photo = photo,
-        photoSize = photoSize,
         footerText = footerText,
         hyphenation = hyphenation,
         social = social,

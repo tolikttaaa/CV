@@ -25,15 +25,17 @@ object WebRenderer {
 
     /** Writes the portfolio data document to [outFile], creating parent directories. */
     fun render(cv: Cv, outFile: Path) {
-        val root = obj(
-            "name" to obj(
-                "first" to str(cv.firstName),
-                "last" to str(cv.lastName),
+        val root = Json.Obj(
+            listOfNotNull(
+                "name" to obj(
+                    "first" to str(cv.firstName),
+                    "last" to str(cv.lastName),
+                ),
+                "tagline" to str(cv.tagline),
+                cv.photo?.let { "photo" to str(it.file) },
+                "social" to arr(cv.social.flatten().map { social(it) }),
+                "sections" to arr(cv.sections.map { section(it) }),
             ),
-            "tagline" to str(cv.tagline),
-            "photo" to str(cv.photo),
-            "social" to arr(cv.social.flatten().map { social(it) }),
-            "sections" to arr(cv.sections.map { section(it) }),
         )
         Files.createDirectories(outFile.parent)
         outFile.toFile().writeText(JsonWriter.write(root))
@@ -75,6 +77,14 @@ object WebRenderer {
             "text" to str(s.text),
         )
     }
+
+    /** Renders a referee's company: linked when a URL is present, but not bold — the referee card stays compact. */
+    private fun refereeCompanyHtml(c: Organization): String =
+        if (c.url != null) {
+            """<a href="${HtmlText.escape(c.url)}" target="_blank" rel="noopener">${HtmlText.escape(c.name)}</a>"""
+        } else {
+            HtmlText.escape(c.name)
+        }
 
     /** Renders a company: name always bold, linked when a URL is present. */
     private fun companyHtml(c: Organization): String {
@@ -132,11 +142,8 @@ object WebRenderer {
                     "items" to arr(section.projects.map { p ->
                         obj(
                             "name" to str(p.name),
-                            "company_html" to str(
-                                companyHtml(p.company) +
-                                    (p.location?.let { ", ${HtmlText.escape(it)}" } ?: ""),
-                            ),
-                            "year" to str(p.year),
+                            "company_html" to str(companyHtml(p.company)),
+                            "dates" to str(p.dates),
                             "description_html" to str(HtmlText.html(p.description)),
                             "tags" to arr(p.tags.map { str(it) }),
                         )
@@ -161,7 +168,7 @@ object WebRenderer {
                         obj(
                             "name" to str(r.name),
                             "role" to str(r.role),
-                            "company" to str(r.company.name),
+                            "company_html" to str(refereeCompanyHtml(r.company)),
                             "period" to str(r.period),
                             "email" to str(r.email),
                         )

@@ -3,7 +3,7 @@ package cv.model
 /**
  * Named colors available for [Colored] text.
  *
- * Each color carries both its LaTeX name (must be defined in `documentMETADATA.cls`)
+ * Each color carries both its LaTeX name (must be defined in `cvdsl.cls`)
  * and a CSS equivalent used by the web renderer.
  */
 enum class CvColor(val latexName: String, val css: String) {

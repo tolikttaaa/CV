@@ -35,8 +35,7 @@ val anatoliiCv: Cv = cv {
     firstName = "Anatolii"
     lastName = "Anishchenko"
     tagline = "Java/Kotlin Software Engineer"
-    photo = "photo.jpg"
-    photoSize = "2.2cm"
+    photo(file = "photo.jpg", size = "2.2cm")
     footerText = "Anatolii Anishchenko — CV"
     hyphenation = false // words always wrap whole; no per-word nowrap needed
 

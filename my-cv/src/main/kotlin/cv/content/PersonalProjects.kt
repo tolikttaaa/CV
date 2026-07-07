@@ -9,8 +9,7 @@ internal fun CvBuilder.personalProjectsSection() =
         project(
             name = "System of retryable chain tasks",
             company = Companies.TINKOFF,
-            location = "St.Petersburg, Russia",
-            year = "2022",
+            dates = "2022",
             tags = listOf("Kotlin", "Spring", "Task Scheduler", "Quartz"),
         ) {
             paragraph(

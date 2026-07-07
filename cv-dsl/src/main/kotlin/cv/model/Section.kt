@@ -70,8 +70,7 @@ data class SkillsSection(
 data class Project(
     val name: String,
     val company: Organization,
-    val location: String?,
-    val year: String,
+    val dates: String,
     val description: Description,
     val tags: List<String>,
 )

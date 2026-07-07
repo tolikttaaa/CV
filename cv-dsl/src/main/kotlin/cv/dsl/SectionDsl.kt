@@ -70,24 +70,21 @@ class ProjectsBuilder {
      * @param name Project name.
      * @param company Organization the project was built at; the name is always
      *   rendered in bold and linked when [Organization.url] is set.
-     * @param location City / country, shown after the company; omit if not tied to a place.
-     * @param year Year or period of the project.
+     * @param dates Human-readable period, e.g. `"2022"` or `"May 2021 – January 2023"`.
      * @param tags Technology keywords shown as chips under the description.
      * @param description Body text: paragraphs and bullet lists.
      */
     fun project(
         name: String,
         company: Organization,
-        location: String? = null,
-        year: String,
+        dates: String,
         tags: List<String>,
         description: DescriptionBuilder.() -> Unit,
     ) {
         projects += Project(
             name = name,
             company = company,
-            location = location,
-            year = year,
+            dates = dates,
             description = DescriptionBuilder().apply(description).build(),
             tags = tags,
         )
@@ -139,8 +136,8 @@ class ReferencesBuilder {
     internal val referees = mutableListOf<Referee>()
 
     /**
-     * Adds one professional reference. Only the [company] name is shown in this
-     * section — the compact referee block stays unstyled and unlinked.
+     * Adds one professional reference. The [company] name is linked when
+     * [Organization.url] is set, but not emphasized — the referee block stays compact.
      */
     fun referee(name: String, role: String, company: Organization, period: String, email: String) {
         referees += Referee(name, role, company, period, email)
