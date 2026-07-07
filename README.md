@@ -77,17 +77,30 @@ Available styles: `bold`, `italic`, `nowrap` (keep on one line), `colored(CvColo
 
 ## Building locally
 
-Requires JDK 21+ and LuaLaTeX (TeX Live 2022+).
+Requires JDK 21+ and LuaLaTeX (TeX Live 2022+). The pipeline is a set of Gradle
+tasks in the `cv` group (`./gradlew tasks --group cv`):
+
+| Task           | Depends on                 | Produces                                        |
+|----------------|----------------------------|-------------------------------------------------|
+| `generateLatex`| —                          | `build/latex/` — LaTeX sources + template + photo |
+| `generatePdf`  | `generateLatex`            | `build/cv.pdf` (two LuaLaTeX passes; log in `build/lualatex.log`) |
+| `generateWeb`  | —                          | `build/cv-data.json`                            |
+| `assembleSite` | `generateWeb`, `generatePdf` | `build/site/` — deployable web page bundle    |
+| `serveSite`    | `assembleSite`             | dev server at http://localhost:8080             |
+| `stopSite`     | —                          | stops the dev server                            |
 
 ```sh
-./gradlew generatePdf     # Kotlin DSL → build/latex → build/cv.pdf (LuaLaTeX, 2 passes)
-./gradlew generateWeb     # Kotlin DSL → build/cv-data.json
-./gradlew assembleSite    # complete web page bundle → build/site
-./gradlew serveSite       # all of the above + dev server at http://localhost:8080
-./gradlew stopSite        # stop the dev server
+./gradlew generatePdf     # just the PDF
+./gradlew serveSite       # everything + local preview
+./gradlew stopSite        # stop the preview server
 ```
 
-If LuaLaTeX is not at `/Library/TeX/texbin/lualatex` or on `PATH`, pass `-PlualatexPath=/path/to/lualatex`.
+Notes:
+- If LuaLaTeX is not at `/Library/TeX/texbin/lualatex` or on `PATH`, pass `-PlualatexPath=/path/to/lualatex`.
+- The dev server is the JDK's own `jwebserver`, started detached — it survives
+  Gradle daemon restarts and is verified to answer before the task succeeds
+  (failures print `build/site-server.log`). `./gradlew run` still generates
+  both LaTeX and web data without compiling anything.
 
 ## Deployment
 
