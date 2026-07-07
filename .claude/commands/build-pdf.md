@@ -1,24 +1,19 @@
-Compile the CV LaTeX source to PDF and regenerate the portfolio JSON data. All artifacts go to the `build/` directory.
+Generate the CV artifacts from the Kotlin DSL, then compile the PDF. All artifacts go to the `build/` directory.
 
 Run these commands sequentially:
 
-1. Ensure the build directory exists:
+1. Generate LaTeX sources (build/latex) and portfolio data (build/cv-data.json) from the Kotlin DSL:
 ```
-mkdir -p /Users/ttaaa/Projects/Personal/CV/build
+cd /Users/ttaaa/Projects/Personal/CV && ./gradlew run
 ```
 
-2. Compile with LuaLaTeX from the latex/ directory so the local class file resolves (run twice for stable output):
+2. Compile with LuaLaTeX from build/latex so the local class file resolves (run twice for stable output):
 ```
-cd /Users/ttaaa/Projects/Personal/CV/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=../build cv.tex
+cd /Users/ttaaa/Projects/Personal/CV/build/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=.. cv.tex
 ```
 Run it a second time to resolve cross-references:
 ```
-cd /Users/ttaaa/Projects/Personal/CV/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=../build cv.tex
+cd /Users/ttaaa/Projects/Personal/CV/build/latex && /Library/TeX/texbin/lualatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=.. cv.tex
 ```
 
-3. Regenerate portfolio data (writes build/cv-data.json):
-```
-python3 /Users/ttaaa/Projects/Personal/CV/scripts/parse_cv.py
-```
-
-Report success or any errors from the LaTeX compilation log.
+Report success or any errors from the Gradle run or the LaTeX compilation log.

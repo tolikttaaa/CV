@@ -4,7 +4,7 @@ Run these commands from the project root:
 
 1. Assemble the site in build/site (mirrors CI). Requires a prior /build-pdf run so build/cv.pdf and build/cv-data.json exist:
 ```
-rm -rf /Users/ttaaa/Projects/Personal/CV/build/site && cp -r /Users/ttaaa/Projects/Personal/CV/web /Users/ttaaa/Projects/Personal/CV/build/site && cp /Users/ttaaa/Projects/Personal/CV/build/cv.pdf /Users/ttaaa/Projects/Personal/CV/build/site/cv.pdf && cp /Users/ttaaa/Projects/Personal/CV/build/cv-data.json /Users/ttaaa/Projects/Personal/CV/build/site/cv-data.json && cp /Users/ttaaa/Projects/Personal/CV/latex/photo.jpg /Users/ttaaa/Projects/Personal/CV/build/site/photo.jpg
+rm -rf /Users/ttaaa/Projects/Personal/CV/build/site && cp -r /Users/ttaaa/Projects/Personal/CV/web /Users/ttaaa/Projects/Personal/CV/build/site && cp /Users/ttaaa/Projects/Personal/CV/build/cv.pdf /Users/ttaaa/Projects/Personal/CV/build/site/cv.pdf && cp /Users/ttaaa/Projects/Personal/CV/build/cv-data.json /Users/ttaaa/Projects/Personal/CV/build/site/cv-data.json && cp /Users/ttaaa/Projects/Personal/CV/build/latex/photo.jpg /Users/ttaaa/Projects/Personal/CV/build/site/photo.jpg
 ```
 
 2. Free the port if already in use:
