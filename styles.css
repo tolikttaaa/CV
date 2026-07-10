@@ -431,6 +431,7 @@ a { color: var(--primary-mid); }
   color: var(--text-2);
   white-space: nowrap;
   font-style: italic;
+  font-weight: 700;
   flex-shrink: 0;
   padding-top: .1rem;
 }
@@ -479,7 +480,6 @@ a { color: var(--primary-mid); }
   margin-bottom: .3rem;
 }
 .project-name { font-weight: 700; font-size: 1.05rem; }
-.project-year { font-size: .87rem; color: var(--text-2); font-style: italic; }
 .project-sub { font-size: .9rem; color: var(--text-2); margin-bottom: .75rem; }
 .project-sub a { color: var(--primary); text-decoration: none; font-weight: 600; }
 

@@ -20,7 +20,7 @@ async function init() {
     console.warn('Portfolio data unavailable:', e.message);
     const btn = document.querySelector('[data-mode="portfolio"]');
     btn.disabled = true;
-    btn.title = 'Portfolio data not found (run scripts/parse_cv.py)';
+    btn.title = 'Portfolio data not found (run generator: ./gradlew run)';
   }
 
   setMode(jsonOk ? 'portfolio' : 'pdf');

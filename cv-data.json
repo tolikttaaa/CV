@@ -55,10 +55,10 @@
       "items": [
         {
           "role": "Backend Software Engineer",
-          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\">Azul</a>",
+          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\"><strong>Azul</strong></a>",
           "location": "Limassol, Cyprus",
           "dates": "January 2025 – June 2026",
-          "description_html": "Designed and delivered multiple backend services for vulnerability data processing and enrichment within a JVM ecosystem, including AI-assisted detection of impacted code elements and a centralized CPE/CVE processing pipeline. Established system observability with Grafana to ensure reliability and performance at scale. <ul> <li> Average CVE and CPE ingestion time <strong>decreased from 24h to 8h</strong>, ensuring compliance with a 24-hour security SLA. <li> Class/Method-level vulnerability coverage <strong>improved from 15% to 75%</strong> through automation of data collection and analysis. <li> Migrated the system from a monolithic to a microservices architecture, enabling independent scaling of components and improving overall system flexibility and maintainability. </ul>",
+          "description_html": "Designed and delivered multiple backend services for vulnerability data processing and enrichment within a JVM ecosystem, including AI-assisted detection of impacted code elements and a centralized CPE/CVE processing pipeline. Established system observability with Grafana to ensure reliability and performance at scale. <ul><li>Average CVE and CPE ingestion time <strong>decreased from 24h to 8h</strong>, ensuring compliance with a 24-hour security SLA.</li><li>Class/Method-level vulnerability coverage <strong>improved from 15% to 75%</strong> through automation of data collection and analysis.</li><li>Migrated the system from a monolithic to a microservices architecture, enabling independent scaling of components and improving overall system flexibility and maintainability.</li></ul>",
           "tags": [
             "Kotlin",
             "Java",
@@ -80,10 +80,10 @@
         },
         {
           "role": "Software Engineer in Test",
-          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\">Azul</a>",
+          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\"><strong>Azul</strong></a>",
           "location": "Yerevan, Armenia (relocation to Cyprus)",
           "dates": "April 2023 – January 2025",
-          "description_html": "Improved the quality, reliability, and performance of the automated testing pipeline by introducing structured test planning, expanding automation coverage, and optimizing test execution strategy. Collaborated with developers and product managers to define comprehensive test plans, implemented automated tests for new features, and refactored existing test code to improve maintainability and scalability. <ul> <li> Automated test coverage <strong>increased from 60% to 80%</strong>, improving overall product quality and reducing regression risks. <li> Flaky test rate <strong>reduced from 30% to <1%</strong>, significantly increasing test reliability and developer trust in CI results. <li> Average pipeline test execution time <strong>decreased from 2 hours to 1 hour</strong> by splitting tests by scope and executing only impacted tests per pipeline. </ul>",
+          "description_html": "Improved the quality, reliability, and performance of the automated testing pipeline by introducing structured test planning, expanding automation coverage, and optimizing test execution strategy. Collaborated with developers and product managers to define comprehensive test plans, implemented automated tests for new features, and refactored existing test code to improve maintainability and scalability. <ul><li>Automated test coverage <strong>increased from 60% to 80%</strong>, improving overall product quality and reducing regression risks.</li><li>Flaky test rate <strong>reduced from 30% to &lt;1%</strong>, significantly increasing test reliability and developer trust in CI results.</li><li>Average pipeline test execution time <strong>decreased from 2 hours to 1 hour</strong> by splitting tests by scope and executing only impacted tests per pipeline.</li></ul>",
           "tags": [
             "Java",
             "Allure TestOps",
@@ -99,10 +99,10 @@
         },
         {
           "role": "Java Backend Developer",
-          "company_html": "<a href=\"https://yandex.com/company\" target=\"_blank\" rel=\"noopener\">Yandex</a>",
+          "company_html": "<a href=\"https://yandex.com/company\" target=\"_blank\" rel=\"noopener\"><strong>Yandex</strong></a>",
           "location": "Yerevan, Armenia",
           "dates": "January 2023 – April 2023",
-          "description_html": "Implemented a billing service designed for the creation and management of promotional offers and subscriptions. The system enabled quick and flexible setup of new promotions with configurable conditions. The system allows non-engineering teams to independently create and manage offers without requiring code changes or database migrations. <ul> <li> Time-to-market for new promotions <strong>reduced from days to hours</strong>, eliminating dependency on engineering team. </ul>",
+          "description_html": "Implemented a billing service designed for the creation and management of promotional offers and subscriptions. The system enabled quick and flexible setup of new promotions with configurable conditions. The system allows non-engineering teams to independently create and manage offers without requiring code changes or database migrations. <ul><li>Time-to-market for new promotions <strong>reduced from days to hours</strong>, eliminating dependency on engineering team.</li></ul>",
           "tags": [
             "Java",
             "PostgreSQL",
@@ -114,10 +114,10 @@
         },
         {
           "role": "Kotlin Backend Developer",
-          "company_html": "<a href=\"https://www.tinkoff.ru/software/\" target=\"_blank\" rel=\"noopener\">Tinkoff</a>",
+          "company_html": "<a href=\"https://www.tinkoff.ru/software/\" target=\"_blank\" rel=\"noopener\"><strong>Tinkoff</strong></a>",
           "location": "St.Petersburg, Russia (relocation to Armenia)",
           "dates": "May 2021 – January 2023",
-          "description_html": "Designed and delivered multiple high-load backend services and infrastructure components, including workflow orchestration, low-latency data services, distributed data migration, and internal execution frameworks. Focused on scalability, reliability, and automation across distributed systems. <ul> <li> Enabled stable handling of <strong>10k+ RPS</strong> by building a customer data service, establishing a single source of truth for multiple internal platforms. <li> Reduced manual data migration effort and automated large-scale transfers, processing millions of records across PostgreSQL and Oracle systems. <li> Test coverage <strong>increased by 50%</strong> and regression cycle time <strong>reduced by 70%</strong> by introducing an automated testing framework integrated into CI/CD pipelines. </ul>",
+          "description_html": "Designed and delivered multiple high-load backend services and infrastructure components, including workflow orchestration, low-latency data services, distributed data migration, and internal execution frameworks. Focused on scalability, reliability, and automation across distributed systems. <ul><li>Enabled stable handling of <strong>10k+ RPS</strong> by building a customer data service, establishing a single source of truth for multiple internal platforms.</li><li>Reduced manual data migration effort and automated large-scale transfers, processing millions of records across PostgreSQL and Oracle systems.</li><li>Test coverage <strong>increased by 50%</strong> and regression cycle time <strong>reduced by 70%</strong> by introducing an automated testing framework integrated into CI/CD pipelines.</li></ul>",
           "tags": [
             "Kotlin",
             "PostgreSQL",
@@ -206,9 +206,9 @@
       "items": [
         {
           "name": "System of retryable chain tasks",
-          "company_html": "<a href=\"https://www.tinkoff.ru/software/\" target=\"_blank\" rel=\"noopener\">Tinkoff</a>, St.Petersburg, Russia",
-          "year": "2022",
-          "description_html": "Implemented a Java Spring library for delayed and retryable execution of task chains (similar to <strong>Quartz</strong>), supporting configurable retries, delays, metrics, and REST-based task management. <ul> <li> Job success rate <strong>increased to 99.9%</strong> and recovery time <strong>reduced by 50%</strong>. </ul>",
+          "company_html": "<a href=\"https://www.tinkoff.ru/software/\" target=\"_blank\" rel=\"noopener\"><strong>Tinkoff</strong></a>",
+          "dates": "2022",
+          "description_html": "Implemented a Java Spring library for delayed and retryable execution of task chains (similar to <strong>Quartz</strong>), supporting configurable retries, delays, metrics, and REST-based task management. <ul><li>Job success rate <strong>increased to 99.9%</strong> and recovery time <strong>reduced by 50%</strong>.</li></ul>",
           "tags": [
             "Kotlin",
             "Spring",
@@ -225,7 +225,7 @@
       "items": [
         {
           "role": "University Teaching Assistant",
-          "company_html": "<a href=\"http://en.ifmo.ru/\" target=\"_blank\" rel=\"noopener\"><strong>ITMO University</strong></a>",
+          "company_html": "<a href=\"https://en.itmo.ru/\" target=\"_blank\" rel=\"noopener\"><strong>ITMO University</strong></a>",
           "location": "St.Petersburg, Russia",
           "dates": "September 2020 – May 2023",
           "description_html": "Contributed to the development of laboratory assignments and teaching materials for the <strong>Information Technology</strong> course. Oversaw and assessed laboratory work submitted by undergraduate students.",
@@ -240,7 +240,7 @@
         },
         {
           "role": "Olympiad Programming Teacher",
-          "company_html": "<a href=\"https://en.letovo.ru/\" target=\"_blank\" rel=\"noopener\">Letovo School</a>",
+          "company_html": "<a href=\"https://en.letovo.ru/\" target=\"_blank\" rel=\"noopener\"><strong>Letovo School</strong></a>",
           "location": "Moscow, Russia",
           "dates": "January 2020, May 2019",
           "description_html": "Taught at the School of Olympiad Programming at Letovo School. Prepared and delivered lectures on <strong>Algorithms</strong> and <strong>Data Structures</strong> to 7th–8th grade high school students.",
@@ -255,7 +255,7 @@
         },
         {
           "role": "Summer Computer Science School Teacher",
-          "company_html": "<a href=\"https://univer-sum.ru\" target=\"_blank\" rel=\"noopener\">UniverSum</a>",
+          "company_html": "<a href=\"https://univer-sum.ru\" target=\"_blank\" rel=\"noopener\"><strong>UniverSum</strong></a>",
           "location": "Munich, Germany",
           "dates": "May 2018",
           "description_html": "Taught at the Summer Computer Science School UniverSum for Russian students. Prepared and delivered lectures on <strong>Algorithms</strong>, <strong>Augmented and Virtual Reality</strong> to 7th–11th grade high school students.",
@@ -278,15 +278,15 @@
       "items": [
         {
           "years": "2018 – 2022",
-          "description_html": "Bachelor’s Degree in Software Engineering and Computer Technologies: <a href=\"http://en.ifmo.ru/\" target=\"_blank\" rel=\"noopener\"><strong>ITMO University</strong></a>, St.Petersburg, Russia"
+          "description_html": "Bachelor’s Degree in Software Engineering and Computer Technologies: <a href=\"https://en.itmo.ru/\" target=\"_blank\" rel=\"noopener\"><strong>ITMO University</strong></a>, St.Petersburg, Russia"
         },
         {
           "years": "2014 – 2018",
-          "description_html": "complete secondary: <a href=\"http://www.school.ioffe.ru/readings/pths_about_en.html\" target=\"_blank\" rel=\"noopener\"><strong>Physical Technical High School</strong> (PTHS)</a>, St.Petersburg, Russia"
+          "description_html": "complete secondary: <a href=\"https://www.school.ioffe.ru/readings/pths_about_en.html\" target=\"_blank\" rel=\"noopener\"><strong>Physical Technical High School (PTHS)</strong></a>, St.Petersburg, Russia"
         },
         {
           "years": "2018",
-          "description_html": "school exchange program (1 month): <a href=\"https://www.imsa.edu/\" target=\"_blank\" rel=\"noopener\"><strong>Illinois Mathematical and Science Academy</strong></a>, Illinois, USA"
+          "description_html": "school exchange program (1 month): <a href=\"https://www.imsa.edu/\" target=\"_blank\" rel=\"noopener\"><strong>Illinois Mathematical and Science Academy (IMSA)</strong></a>, Illinois, USA"
         }
       ]
     },
@@ -298,22 +298,22 @@
         {
           "name": "Evgeny Gil",
           "role": "Manager, Software Engineer",
-          "company": "Azul",
-          "period": "2025 - Today",
+          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\">Azul</a>",
+          "period": "2025 - 2026",
           "email": "egil@azul.com"
         },
         {
           "name": "Sergey Grinev",
           "role": "Senior Manager, QA Engineer",
-          "company": "Azul",
+          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\">Azul</a>",
           "period": "2023 - 2024",
           "email": "sergey.grinev@azul.com"
         },
         {
           "name": "Sergii Kurstak",
           "role": "Senior Director, Engineering",
-          "company": "Azul",
-          "period": "2024 - Today",
+          "company_html": "<a href=\"https://www.azul.com/\" target=\"_blank\" rel=\"noopener\">Azul</a>",
+          "period": "2024 - 2026",
           "email": "sergii@azul.com"
         }
       ]
