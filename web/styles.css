@@ -536,6 +536,8 @@ a { color: var(--primary-mid); }
 
 /* contact */
 .contact-list {
+  display: flex;
+  flex-direction: column;
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -545,9 +547,11 @@ a { color: var(--primary-mid); }
 }
 .contact-item {
   display: flex;
+  flex: 1 1 0;
   align-items: center;
   gap: .85rem;
-  padding: .95rem 1.4rem;
+  min-height: 0;
+  padding: .5rem 1.4rem;
   border-bottom: 1px solid var(--border);
   font-size: 1rem;
   color: var(--text);
@@ -577,9 +581,8 @@ footer {
    specificity, so they must come after them in source order */
 /* 2-column summary: the 3-column layout squeezes the text into a sliver
    below ~1250px window width once the 252px sidebar is accounted for.
-   The photo keeps its natural desktop size (320px tall, never cropped or
-   scaled down) and the contacts card keeps its matching 320px height;
-   only the summary text moves below. The sidebar collapses at 900px so
+   The photo and contacts card keep their matching 320px height, and only
+   the summary text moves below. The sidebar collapses at 900px so
    the contacts column always has enough room next to the photo. */
 @media (max-width: 1250px) {
   .summary-grid { grid-template-columns: minmax(0, 1fr) auto; }
@@ -593,6 +596,7 @@ footer {
   .summary-grid { grid-template-columns: 1fr; align-items: start; }
   .summary-photo { order: 1; grid-column: auto; width: 100%; max-width: 340px; height: auto; justify-self: center; }
   .contact-list  { order: 2; height: auto; }
+  .contact-item  { flex: none; padding: .95rem 1.4rem; }
   .summary-box   { order: 3; grid-column: auto; }
 }
 

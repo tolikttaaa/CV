@@ -47,10 +47,11 @@ val anatoliiCv: Cv = cv {
         }
         row {
             linkedin("ttaaa")
+            github("tolikttaaa")
             leetcode("ttaaa")
         }
         row {
-            address("Cyprus")
+            address("Cyprus, Limassol")
         }
     }
 
