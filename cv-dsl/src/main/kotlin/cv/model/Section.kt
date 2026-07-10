@@ -4,10 +4,10 @@ package cv.model
  * A titled section of the CV.
  *
  * There is one implementation per section layout; the renderers dispatch on the
- * concrete type to produce the matching LaTeX environment or JSON section type.
+ * concrete type to produce the matching LaTeX or HTML layout.
  */
 sealed interface Section {
-    /** Stable identifier: the generated LaTeX file name (`sections/<id>.tex`) and the JSON section id. */
+    /** Stable identifier used by generated LaTeX files and web navigation. */
     val id: String
 
     /** Section heading in the PDF. */

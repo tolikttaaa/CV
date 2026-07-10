@@ -4,7 +4,7 @@
 // Pipeline tasks (group "cv", list with `./gradlew tasks --group cv`):
 //   generateLatex — Kotlin DSL → build/latex (sources + template + photo)
 //   generatePdf   — generateLatex + two LuaLaTeX passes → build/cv.pdf
-//   generateWeb   — Kotlin DSL → build/cv-data.json
+//   generateWeb   — Kotlin DSL → build/web (complete static portfolio)
 //   assembleSite  — generateWeb + generatePdf → build/site (deployable bundle)
 //   serveSite     — assembleSite + detached jwebserver on http://localhost:8080
 //   stopSite      — kills the dev server
@@ -84,7 +84,7 @@ val generatePdf = tasks.register("generatePdf") {
 
 val generateWeb = tasks.register<JavaExec>("generateWeb") {
     group = "cv"
-    description = "Generates the portfolio data (build/cv-data.json) from the Kotlin DSL."
+    description = "Generates static portfolio files in build/web from the Kotlin DSL."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("cv.MainKt")
     workingDir = repoRoot
@@ -93,12 +93,10 @@ val generateWeb = tasks.register<JavaExec>("generateWeb") {
 
 val assembleSite = tasks.register<Sync>("assembleSite") {
     group = "cv"
-    description = "Assembles the complete web page (build/site): static app, data, PDF, photo."
+    description = "Assembles the generated portfolio and PDF into build/site."
     dependsOn(generateWeb, generatePdf)
-    from(File(repoRoot, "web"))
+    from(File(buildRoot, "web"))
     from(File(buildRoot, "cv.pdf"))
-    from(File(buildRoot, "cv-data.json"))
-    from(File(buildRoot, "latex/photo.jpg"))
     into(File(buildRoot, "site"))
 }
 

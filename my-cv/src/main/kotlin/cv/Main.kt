@@ -1,8 +1,8 @@
 package cv
 
 import cv.content.anatoliiCv
-import cv.render.latex.LatexRenderer
-import cv.render.web.WebRenderer
+import cv.render.CvRendererFactory
+import cv.render.RenderFormat
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -15,7 +15,7 @@ import java.nio.file.StandardCopyOption
  *  - `target` — what to generate:
  *      - `latex` — `build/latex/`: complete LaTeX source directory (generated
  *        sections, bundled document class and fonts, profile photo)
- *      - `web` — `build/cv-data.json`: portfolio data for the web view
+ *      - `web` — `build/web/`: generated static portfolio files
  *      - `all` (default) — both
  *
  * Normally invoked through the Gradle tasks `generateLatex` / `generateWeb` / `run`.
@@ -29,19 +29,20 @@ fun main(args: Array<String>) {
 
     if (target != "web") {
         val latexOut = root.resolve("build/latex")
-        LatexRenderer.render(anatoliiCv, latexOut)
+        CvRendererFactory.create(RenderFormat.Latex).render(anatoliiCv, latexOut)
         anatoliiCv.photo?.let { copyPhoto(latexOut.resolve(it.file)) }
         println("Generated LaTeX sources in $latexOut")
     }
 
     if (target != "latex") {
-        val jsonOut = root.resolve("build/cv-data.json")
-        WebRenderer.render(anatoliiCv, jsonOut)
-        println("Generated $jsonOut")
+        val webOut = root.resolve("build/web")
+        CvRendererFactory.create(RenderFormat.Web).render(anatoliiCv, webOut)
+        anatoliiCv.photo?.let { copyPhoto(webOut.resolve(it.file)) }
+        println("Generated web portfolio in $webOut")
     }
 }
 
-/** Copies the bundled profile photo (a resource of this module) next to the LaTeX sources. */
+/** Copies the bundled profile photo (a resource of this module) into a generated output directory. */
 private fun copyPhoto(target: Path) {
     val stream = object {}.javaClass.getResourceAsStream("/photo.jpg")
         ?: error("Bundled resource /photo.jpg not found")

@@ -20,20 +20,34 @@ CV described with a Kotlin DSL — the single source of truth — rendered to a 
 │       │   │   ├── SocialDsl.kt    #   Contact block builder
 │       │   │   └── TextDsl.kt      #   Rich text and paragraph/bullet builders
 │       │   └── render/
+│       │       ├── CvRenderer.kt   # Common complete-renderer contract
+│       │       ├── CvRendererFactory.kt # Sealed-format renderer selection
+│       │       ├── RenderFormat.kt # Supported Web and LaTeX formats
+│       │       ├── SectionRenderer.kt # Shared typed section visitor
+│       │       ├── ElementRenderer.kt # Generic model-element contract
+│       │       ├── RendererBundle.kt # Compile-time-complete renderer set
 │       │       ├── latex/          # Model → compilable LaTeX directory
-│       │       │   ├── LatexRenderer.kt
+│       │       │   ├── LatexRenderer.kt # Small public generation entry point
+│       │       │   ├── LatexDocumentRenderer.kt # Root document shell
+│       │       │   ├── *LatexRenderer.kt # Type-specific section render functions
+│       │       │   ├── LatexComponents.kt # Contacts, organizations and block content
 │       │       │   ├── LatexTemplate.kt # Extracts the bundled cls + fonts
-│       │       │   └── LatexText.kt#   Inline markup → LaTeX, escaping
-│       │       └── web/            # Model → build/cv-data.json
-│       │           ├── WebRenderer.kt # Schema consumed by web/portfolio.js
-│       │           ├── HtmlText.kt #   Inline markup → HTML fragments
-│       │           └── JsonWriter.kt # Minimal dependency-free JSON writer
-│       └── resources/…/template/   # Bundled cvdsl.cls + fonts
+│       │       │   └── LatexText.kt # Inline markup → LaTeX, escaping
+│       │       └── web/            # Model → complete static portfolio
+│       │           ├── WebRenderer.kt # Small public generation entry point
+│       │           ├── WebDocumentRenderer.kt # Shared page shell
+│       │           ├── *WebRenderer.kt # Type-specific section render functions
+│       │           ├── WebComponents.kt # Contacts, organizations, tags and titles
+│       │           ├── WebTemplate.kt # Extracts bundled browser assets
+│       │           └── HtmlText.kt #   Inline markup → HTML fragments
+│       └── resources/cv/render/
+│           ├── latex/template/     # Bundled cvdsl.cls + fonts
+│           └── web/template/       # Bundled CSS, JavaScript and favicon
 ├── my-cv/                          # Module 2: the actual CV (depends on :cv-dsl)
 │   └── src/main/
 │       ├── resources/photo.jpg     # Profile photo
 │       └── kotlin/cv/
-│           ├── Main.kt             # Entry point: renders LaTeX + web data into build/
+│           ├── Main.kt             # Entry point: renders LaTeX + the static site into build/
 │           └── content/            # ★ The CV content, written in the DSL — edit these
 │               ├── CvDefinition.kt #   Header, contacts, section order
 │               ├── Summary.kt      #   One file per section, like latex/sections/ before
@@ -43,13 +57,10 @@ CV described with a Kotlin DSL — the single source of truth — rendered to a 
 │               ├── Teaching.kt
 │               ├── Education.kt
 │               └── References.kt
-├── web/
-│   ├── index.html                  # GitHub Pages landing page
-│   └── favicon.png                 # Site icon
 ├── build/                          # All build output (gitignored)
 │   ├── latex/                      # Generated LaTeX sources + assets
 │   ├── cv.pdf                      # Compiled CV
-│   ├── cv-data.json                # Generated portfolio data
+│   ├── web/                        # Generated static portfolio (HTML + assets)
 │   └── site/                       # Assembled site (deployed to Pages)
 └── .github/workflows/
     └── build-deploy.yml            # Generate → compile → deploy pipeline
@@ -84,7 +95,7 @@ tasks in the `cv` group (`./gradlew tasks --group cv`):
 |----------------|----------------------------|-------------------------------------------------|
 | `generateLatex`| —                          | `build/latex/` — LaTeX sources + template + photo |
 | `generatePdf`  | `generateLatex`            | `build/cv.pdf` (two LuaLaTeX passes; log in `build/lualatex.log`) |
-| `generateWeb`  | —                          | `build/cv-data.json`                            |
+| `generateWeb`  | —                          | `build/web/` — generated HTML and browser assets |
 | `assembleSite` | `generateWeb`, `generatePdf` | `build/site/` — deployable web page bundle    |
 | `serveSite`    | `assembleSite`             | dev server at http://localhost:8080             |
 | `stopSite`     | —                          | stops the dev server                            |
@@ -100,13 +111,13 @@ Notes:
 - The dev server is the JDK's own `jwebserver`, started detached — it survives
   Gradle daemon restarts and is verified to answer before the task succeeds
   (failures print `build/site-server.log`). `./gradlew run` still generates
-  both LaTeX and web data without compiling anything.
+  both LaTeX and the complete web portfolio without compiling the PDF.
 
 ## Deployment
 
 Every push to `main` triggers the GitHub Actions workflow:
 
-1. Runs the Kotlin generator: LaTeX sources → `build/latex`, portfolio data → `build/cv-data.json`
+1. Runs the Kotlin generator: LaTeX sources → `build/latex`, static portfolio → `build/web`
 2. Compiles `build/latex/cv.tex` with LuaLaTeX inside a full TeX Live container
 3. Assembles the site into `build/site` and pushes it to the `gh-pages` branch
 
