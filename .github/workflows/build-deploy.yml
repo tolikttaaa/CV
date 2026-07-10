@@ -19,21 +19,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Generate LaTeX sources and portfolio data
+        run: ./gradlew run
+
       - name: Compile LaTeX (LuaLaTeX)
         uses: xu-cheng/latex-action@v3
         with:
           root_file: cv.tex
-          working_directory: latex
+          working_directory: build/latex
           latexmk_use_lualatex: true
-
-      - name: Generate portfolio data
-        run: python3 scripts/parse_cv.py
 
       - name: Prepare Pages content
         run: |
           cp -r web build/site
-          cp latex/cv.pdf build/site/cv.pdf
-          cp latex/photo.jpg build/site/photo.jpg
+          cp build/latex/cv.pdf build/site/cv.pdf
+          cp build/latex/photo.jpg build/site/photo.jpg
           cp build/cv-data.json build/site/cv-data.json
 
       - name: Deploy to GitHub Pages

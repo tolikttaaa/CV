@@ -105,8 +105,8 @@ function renderSummary(sec) {
     <div class="summary-grid">
       <div class="contact-list">${contactItems}</div>
       <div class="summary-box">${sec.html}</div>
-      <img class="summary-photo" src="${esc(cvData.photo)}" alt="Photo"
-           onerror="this.style.display='none'">
+      ${cvData.photo ? `<img class="summary-photo" src="${esc(cvData.photo)}" alt="Photo"
+           onerror="this.style.display='none'">` : ''}
     </div>`;
 }
 
@@ -140,7 +140,7 @@ function renderProjects(sec) {
     <div class="project-card">
       <div class="project-header">
         <div class="project-name">${esc(item.name)}</div>
-        <div class="project-year">${esc(item.year)}</div>
+        <div class="work-dates">${esc(item.dates)}</div>
       </div>
       <div class="project-sub">${item.company_html}</div>
       <div class="work-desc">${item.description_html}</div>
@@ -164,7 +164,7 @@ function renderReferences(sec) {
       <div class="ref-name">${esc(item.name)}</div>
       <div class="ref-detail">
         <div>${esc(item.role)}</div>
-        <div>${esc(item.company)} · ${esc(item.period)}</div>
+        <div>${item.company_html} · ${esc(item.period)}</div>
         <div><a href="mailto:${esc(item.email)}">${esc(item.email)}</a></div>
       </div>
     </div>`).join('');

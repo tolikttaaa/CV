@@ -1,0 +1,12 @@
+# Normalize all text files to LF in the repository and on checkout…
+* text=auto eol=lf
+
+# …except Windows batch scripts, which cmd.exe expects to be CRLF
+*.bat text eol=crlf
+
+# Binary files — never touch line endings
+*.png binary
+*.jpg binary
+*.otf binary
+*.jar binary
+*.pdf binary
