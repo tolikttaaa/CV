@@ -39,6 +39,7 @@ annotation class CvDsl
  * Text is written as-is — LaTeX/HTML escaping is done by the renderers.
  */
 @CvDsl
+@Suppress("TooManyFunctions") // A fluent text DSL intentionally exposes one function per operation.
 class TextBuilder {
     private val inlines = mutableListOf<Inline>()
 

@@ -33,11 +33,22 @@ internal object WebSocialRenderer : ElementRenderer<Social, WebRenderContext> {
     override fun render(element: Social, context: WebRenderContext): String {
         val contact = when (element) {
             is Social.Phone -> WebContact("fa-solid", "phone", null, element.number)
-            is Social.Telegram -> WebContact("fa-brands", "telegram", "https://t.me/${element.handle}", "t.me/${element.handle}")
+            is Social.Telegram -> WebContact(
+                "fa-brands", "telegram", "https://t.me/${element.handle}", "t.me/${element.handle}",
+            )
             is Social.Email -> WebContact("fa-solid", "envelope", "mailto:${element.address}", element.address)
-            is Social.LinkedIn -> WebContact("fa-brands", "linkedin", "https://www.linkedin.com/in/${element.handle}", "linkedin.com/in/${element.handle}")
-            is Social.LeetCode -> WebContact("fa-solid", "code", "https://leetcode.com/u/${element.handle}", "leetcode.com/u/${element.handle}")
-            is Social.GitHub -> WebContact("fa-brands", "github", "https://github.com/${element.handle}", "github.com/${element.handle}")
+            is Social.LinkedIn -> WebContact(
+                "fa-brands", "linkedin", "https://www.linkedin.com/in/${element.handle}",
+                "linkedin.com/in/${element.handle}",
+            )
+            is Social.LeetCode -> WebContact(
+                "fa-solid", "code", "https://leetcode.com/u/${element.handle}",
+                "leetcode.com/u/${element.handle}",
+            )
+            is Social.GitHub -> WebContact(
+                "fa-brands", "github", "https://github.com/${element.handle}",
+                "github.com/${element.handle}",
+            )
             is Social.Address -> WebContact("fa-solid", "location-dot", null, element.text)
         }
         val content = "<i class=\"${contact.iconClass} fa-${contact.icon}\"></i><span>${h(contact.text)}</span>"

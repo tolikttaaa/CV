@@ -8,7 +8,12 @@ import cv.model.SkillsSection
 import cv.model.SummarySection
 import cv.model.WorksSection
 
-/** Typed visitor implemented once per output representation. */
+/**
+ * Typed visitor for the sealed [Section] hierarchy.
+ *
+ * [RendererBundle] supplies the default delegation to its section-level
+ * [ElementRenderer] properties; this interface defines the exhaustive surface.
+ */
 internal interface SectionRenderer<C> {
     fun render(section: SummarySection, context: C): String
     fun render(section: WorksSection, context: C): String
@@ -18,7 +23,10 @@ internal interface SectionRenderer<C> {
     fun render(section: ReferencesSection, context: C): String
 }
 
-/** Exhaustive shared dispatch for the sealed section hierarchy. */
+/**
+ * Exhaustively dispatches this section to [renderer]. Adding a new [Section]
+ * subtype fails compilation here until every format supports it.
+ */
 internal fun <C> Section.renderWith(renderer: SectionRenderer<C>, context: C): String = when (this) {
     is SummarySection -> renderer.render(this, context)
     is WorksSection -> renderer.render(this, context)

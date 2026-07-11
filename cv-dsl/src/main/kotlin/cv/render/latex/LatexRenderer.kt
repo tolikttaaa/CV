@@ -6,7 +6,12 @@ import cv.render.renderWith
 import java.nio.file.Files
 import java.nio.file.Path
 
-/** Public entry point for the reusable LaTeX representation. */
+/**
+ * Generates a compilable LaTeX source tree.
+ *
+ * The output contains `cv.tex`, one file per section, the `cvdsl` document
+ * class and local fonts. The caller copies the profile photo into the tree.
+ */
 object LatexRenderer : CvRenderer {
 
     /** Writes `cv.tex`, all section files, and the bundled template into [outDir]. */

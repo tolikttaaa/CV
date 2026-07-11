@@ -1,0 +1,9 @@
+# Single source of truth for build-tool versions used by every module.
+[versions]
+java = "21"
+kotlin = "2.2.20"
+detekt = "2.0.0-alpha.5"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }

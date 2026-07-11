@@ -28,6 +28,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Run checks
+        run: ./gradlew check
+
       - name: Generate LaTeX sources and portfolio site
         run: ./gradlew run
 

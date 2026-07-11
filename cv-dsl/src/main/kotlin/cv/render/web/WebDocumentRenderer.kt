@@ -4,6 +4,7 @@ import cv.model.Cv
 import cv.render.renderWith
 
 /** Renders the shared page chrome around the type-specific CV structures. */
+@Suppress("LongMethod") // Keeping the static page shell together makes its HTML hierarchy readable.
 internal fun Cv.renderWebDocument(): String {
     val fullName = "$firstName $lastName"
     val context = WebRenderContext(this)

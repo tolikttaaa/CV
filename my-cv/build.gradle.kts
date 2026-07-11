@@ -4,7 +4,7 @@
 // Pipeline tasks (group "cv", list with `./gradlew tasks --group cv`):
 //   generateLatex — Kotlin DSL → build/latex (sources + template + photo)
 //   generatePdf   — generateLatex + two LuaLaTeX passes → build/cv.pdf
-//   generateWeb   — Kotlin DSL → build/web (complete static portfolio)
+//   generateWeb   — Kotlin DSL → build/web (generated HTML + browser assets)
 //   assembleSite  — generateWeb + generatePdf → build/site (deployable bundle)
 //   serveSite     — assembleSite + detached jwebserver on http://localhost:8080
 //   stopSite      — kills the dev server
@@ -15,12 +15,12 @@ import java.net.InetSocketAddress
 import java.net.Socket
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     application
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(libs.versions.java.get().toInt())
 }
 
 dependencies {

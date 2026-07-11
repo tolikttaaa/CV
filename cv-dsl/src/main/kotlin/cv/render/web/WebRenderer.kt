@@ -5,7 +5,13 @@ import cv.render.CvRenderer
 import java.nio.file.Files
 import java.nio.file.Path
 
-/** Public entry point for the reusable static web representation. */
+/**
+ * Generates the reusable static portfolio representation.
+ *
+ * The output contains a complete `index.html` and bundled browser assets. The
+ * caller places the profile photo named by [Cv.photo] and `cv.pdf` beside them
+ * when assembling a deployable site.
+ */
 object WebRenderer : CvRenderer {
 
     /** Generates `index.html` and extracts the browser assets into [outDir]. */

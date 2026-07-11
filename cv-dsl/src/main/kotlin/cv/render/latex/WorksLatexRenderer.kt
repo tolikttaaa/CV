@@ -23,8 +23,12 @@ internal object LatexWorksSectionRenderer : ElementRenderer<WorksSection, Unit> 
 internal object LatexWorkRenderer : ElementRenderer<Work, Unit> {
     override fun render(element: Work, context: Unit): String = with(element) {
         buildString {
+            val renderedCompany = company.renderLatex(emphasized = true)
             appendLine("""    \work""")
-            appendLine("""        {${latexEscape(role)}} {${company.renderLatex(emphasized = true)}} {${latexEscape(location)}} {${latexEscape(dates)}}""")
+            appendLine(
+                """        {${latexEscape(role)}} {$renderedCompany} """ +
+                    """{${latexEscape(location)}} {${latexEscape(dates)}}""",
+            )
             appendLine("""        {""")
             append(description.renderLatexBlocks(indent = 3))
             appendLine("""        }""")

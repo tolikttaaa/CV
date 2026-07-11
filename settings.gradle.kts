@@ -1,7 +1,7 @@
 rootProject.name = "cv-generator"
 
-// Reusable CV DSL library: data model, builders, LaTeX and web renderers.
+// Reusable CV DSL library: model, builders, renderer contracts and both formats.
 include("cv-dsl")
 
-// The actual CV: content written in the DSL plus the generator entry point.
+// Application module: personal content, photo, generation CLI and artifact tasks.
 include("my-cv")
