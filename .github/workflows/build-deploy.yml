@@ -32,7 +32,7 @@ jobs:
         run: ./gradlew check
 
       - name: Generate LaTeX sources and portfolio site
-        run: ./gradlew run
+        run: ./gradlew generateLatex generateWeb
 
       - name: Compile LaTeX (LuaLaTeX)
         uses: xu-cheng/latex-action@v3

@@ -9,8 +9,8 @@ import java.nio.file.Path
  * Generates the reusable static portfolio representation.
  *
  * The output contains a complete `index.html` and bundled browser assets. The
- * caller places the profile photo named by [Cv.photo] and `cv.pdf` beside them
- * when assembling a deployable site.
+ * generation application places the profile photo named by [Cv.photo] beside
+ * them, while site assembly adds `cv.pdf` when producing a deployable site.
  */
 object WebRenderer : CvRenderer {
 

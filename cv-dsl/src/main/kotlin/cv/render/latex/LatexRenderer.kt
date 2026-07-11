@@ -10,7 +10,8 @@ import java.nio.file.Path
  * Generates a compilable LaTeX source tree.
  *
  * The output contains `cv.tex`, one file per section, the `cvdsl` document
- * class and local fonts. The caller copies the profile photo into the tree.
+ * class and local fonts. [cv.generation.CvApplication] copies content-owned
+ * assets such as the profile photo into the tree.
  */
 object LatexRenderer : CvRenderer {
 

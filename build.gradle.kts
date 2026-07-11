@@ -1,11 +1,11 @@
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.extensions.DetektExtension
 
-// Shared build configuration. Plugin and toolchain versions are centralized in
-// gradle/libs.versions.toml; module-specific tasks live in the module builds:
-//   cv-dsl/build.gradle.kts — reusable CV toolkit (library)
-//   my-cv/build.gradle.kts  — the actual CV + the artifact pipeline tasks
+// Root coordinator for the personal content build and the included cv-dsl
+// build. Versions live in gradle/libs.versions.toml; reusable CV tasks are
+// supplied by cv-dsl's Gradle plugin rather than implemented here.
 plugins {
+    base
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.detekt) apply false
 }
@@ -35,4 +35,18 @@ subprojects {
             markdown.required.set(true)
         }
     }
+}
+
+// Composite builds are isolated by Gradle, so the root verification lifecycle
+// explicitly includes the reusable cv-dsl build as well as the content module.
+tasks.named("check") {
+    dependsOn(":my-cv:check")
+    dependsOn(gradle.includedBuild("cv-dsl").task(":check"))
+}
+
+tasks.register("detekt") {
+    group = "verification"
+    description = "Runs Detekt in my-cv and the included cv-dsl build."
+    dependsOn(":my-cv:detekt")
+    dependsOn(gradle.includedBuild("cv-dsl").task(":detekt"))
 }

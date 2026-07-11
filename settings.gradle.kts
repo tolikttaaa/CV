@@ -1,7 +1,11 @@
+pluginManagement {
+    // The reusable DSL build provides the generation plugin consumed by my-cv.
+    includeBuild("cv-dsl")
+}
+
 rootProject.name = "cv-generator"
 
-// Reusable CV DSL library: model, builders, renderer contracts and both formats.
-include("cv-dsl")
+includeBuild("cv-dsl")
 
 // Application module: personal content, photo, generation CLI and artifact tasks.
 include("my-cv")

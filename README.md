@@ -12,10 +12,14 @@ and deploys it to GitHub Pages.
 ## Project layout
 
 ```text
-├── gradle/libs.versions.toml       # Java, Kotlin and Detekt versions
-├── cv-dsl/                         # Reusable, content-independent library
+├── gradle/libs.versions.toml       # Build-tool and artifact versions
+├── cv-dsl/                         # Standalone included build
+│   ├── settings.gradle.kts         # Independent build identity and repositories
+│   ├── gradle/libs.versions.toml   # Versions owned by the reusable build
 │   └── src/main/
 │       ├── kotlin/cv/
+│       │   ├── gradle/             # Reusable cv.dsl.generation plugin
+│       │   ├── generation/         # Reusable command-line generation pipeline
 │       │   ├── model/              # Immutable CV model
 │       │   ├── dsl/                # Type-safe cv { ... } builders
 │       │   └── render/
@@ -34,8 +38,10 @@ and deploys it to GitHub Pages.
 └── .github/workflows/              # Verification and Pages deployment
 ```
 
-`cv-dsl` contains no personal CV content and can be extracted as a standalone
-library. `my-cv` depends on it and supplies the actual document definition.
+`cv-dsl` contains no personal CV content. The root build includes it through
+`pluginManagement` for the generation plugin and as a normal composite build
+for dependency substitution of `cv.dsl:cv-dsl`. `my-cv` therefore uses the same
+contracts it would use with published artifacts.
 
 ## Rendering architecture
 
@@ -56,6 +62,19 @@ val renderer = CvRendererFactory.create(RenderFormat.Web)
 renderer.render(cv, outputDirectory)
 ```
 
+`CvApplication` sits above the individual renderers. It parses the common CLI,
+selects formats, owns the output layout, and copies content assets from an
+injectable `CvAssetSource`. The consumer entry point therefore only supplies
+its model:
+
+```kotlin
+fun main(args: Array<String>) = CvApplication(anatoliiCv).run(args)
+```
+
+By default, a photo declared as `photo("photo.jpg")` is loaded from the
+consumer's runtime classpath. Consumers with another asset store can pass a
+custom `CvAssetSource` without changing the generation pipeline.
+
 Both `WebRendererBundle` and `LatexRendererBundle` must satisfy the same bundle
 contract. If a required renderer is missing, compilation fails. Web renderers
 receive `WebRenderContext`; LaTeX renderers use `Unit` because section rendering
@@ -72,6 +91,57 @@ When introducing a new renderable element:
 
 For a new section type, also extend `SectionRenderer` and its exhaustive
 `Section.renderWith` dispatch. Kotlin then forces both formats to support it.
+
+## Gradle generation plugin
+
+`cv-dsl` defines the `cv.dsl.generation` plugin alongside the model and
+renderers. A consumer applies the plugin and depends on the library:
+
+```kotlin
+plugins {
+    kotlin("jvm")
+    application
+    id("cv.dsl.generation")
+}
+
+dependencies {
+    implementation("cv.dsl:cv-dsl:<version>")
+}
+
+application {
+    mainClass.set("cv.MainKt")
+}
+```
+
+The plugin expects that main class to accept `[repositoryRoot, target]`, where
+the target is `latex` or `web`. It owns the complete pipeline:
+
+- `verifyCvEnvironment` checks LuaLaTeX and the JDK `jwebserver` executable;
+- `generateLatex` and `generateWeb` invoke the consumer's generator;
+- `generatePdf` verifies tools, generates LaTeX, and runs LuaLaTeX twice;
+- `assembleSite` combines generated web files and the PDF;
+- `serveSite` and `stopSite` manage a PID-tracked local preview process.
+
+Optional consumer configuration:
+
+```kotlin
+cvGeneration {
+    mainClass.set("example.MainKt")
+    lualatexExecutable.set("/opt/texlive/bin/lualatex")
+    previewPort.set(9090)
+}
+```
+
+Command-line overrides are also available:
+
+```sh
+./gradlew generatePdf -PlualatexPath=/absolute/path/to/lualatex
+./gradlew serveSite -PcvPreviewPort=9090
+```
+
+Missing tools and occupied ports fail early with installation or override
+instructions. Preview management uses only JDK APIs; it does not require
+`bash`, `lsof`, or `xargs`.
 
 ## Editing the CV
 
@@ -116,7 +186,8 @@ social {
 Requirements:
 
 - JDK matching the `java` version in `gradle/libs.versions.toml`;
-- LuaLaTeX from TeX Live 2022 or newer for PDF generation.
+- LuaLaTeX from TeX Live 2022 or newer for PDF generation. Web-only generation
+  does not require a TeX installation.
 
 Important tasks:
 
@@ -124,6 +195,7 @@ Important tasks:
 |---|---|---|
 | `check` | Compile, test and run Detekt in both modules | Verification result |
 | `detekt` | Run static analysis only | `<module>/build/reports/detekt/` |
+| `verifyCvEnvironment` | Check LuaLaTeX and `jwebserver` | Diagnostic output |
 | `generateLatex` | Render the DSL to LaTeX sources | `build/latex/` |
 | `generatePdf` | Render and compile the PDF in two passes | `build/cv.pdf` |
 | `generateWeb` | Render complete HTML and extract browser assets | `build/web/` |
@@ -148,14 +220,22 @@ Main [repository-root] [latex|web|all]
 If LuaLaTeX is not installed at the standard MacTeX path and is not available
 on `PATH`, override it with `-PlualatexPath=/absolute/path/to/lualatex`.
 
-The preview server uses the JDK's `jwebserver`, runs detached, and writes startup
-failures to `build/site-server.log`.
+The preview server uses the JDK's `jwebserver`, records its PID in
+`build/site-server.pid`, and writes output to `build/site-server.log`.
 
 ## Version management
 
-Java, Kotlin and Detekt versions are centralized in
-`gradle/libs.versions.toml`. Module build scripts consume catalog aliases and
-must not declare their own plugin or toolchain versions.
+Each Gradle build owns an independent version catalog:
+
+- `gradle/libs.versions.toml` configures the root application build and the
+  `cv-dsl` version consumed by `my-cv`;
+- `cv-dsl/gradle/libs.versions.toml` configures the reusable library/plugin
+  build and its published artifact version.
+
+Build scripts consume catalog aliases and do not declare plugin or toolchain
+versions directly. Composite dependency substitution ignores the requested
+library version locally; when publishing, update the consumer version only when
+`my-cv` is ready to adopt that release.
 
 Detekt runs with its default rule set, reports in Checkstyle, HTML, SARIF and
 Markdown formats, and is part of every `check` invocation. Narrow suppressions

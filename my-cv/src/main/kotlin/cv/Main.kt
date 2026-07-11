@@ -1,11 +1,7 @@
 package cv
 
 import cv.content.anatoliiCv
-import cv.render.CvRendererFactory
-import cv.render.RenderFormat
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
+import cv.generation.CvApplication
 
 /**
  * Generates CV artifacts from the Kotlin DSL definition.
@@ -20,34 +16,4 @@ import java.nio.file.StandardCopyOption
  *
  * Normally invoked through the Gradle tasks `generateLatex` / `generateWeb` / `run`.
  */
-fun main(args: Array<String>) {
-    val root = Path.of(args.getOrElse(0) { "." }).toAbsolutePath().normalize()
-    val target = args.getOrElse(1) { "all" }
-    require(target in setOf("latex", "web", "all")) {
-        "Unknown target \"$target\" — expected latex, web or all"
-    }
-
-    if (target != "web") {
-        val latexOut = root.resolve("build/latex")
-        CvRendererFactory.create(RenderFormat.Latex).render(anatoliiCv, latexOut)
-        anatoliiCv.photo?.let { copyPhoto(latexOut.resolve(it.file)) }
-        println("Generated LaTeX sources in $latexOut")
-    }
-
-    if (target != "latex") {
-        val webOut = root.resolve("build/web")
-        CvRendererFactory.create(RenderFormat.Web).render(anatoliiCv, webOut)
-        anatoliiCv.photo?.let { copyPhoto(webOut.resolve(it.file)) }
-        println("Generated web portfolio in $webOut")
-    }
-}
-
-/** Copies the bundled profile photo (a resource of this module) into a generated output directory. */
-private fun copyPhoto(target: Path) {
-    val stream = object {}.javaClass.getResourceAsStream("/photo.jpg")
-        ?: error("Bundled resource /photo.jpg not found")
-    stream.use {
-        Files.createDirectories(target.parent)
-        Files.copy(it, target, StandardCopyOption.REPLACE_EXISTING)
-    }
-}
+fun main(args: Array<String>) = CvApplication(anatoliiCv).run(args)
