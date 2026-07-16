@@ -1,52 +1,87 @@
 'use strict';
 
-// Shared mutable state (var → window, accessible across all scripts)
+// Shared state (var → window, also read by pdf-viewer.js).
 var mode = 'portfolio';
-var cvData = null;
+var currentSection = 0;
 
-async function init() {
-  let jsonOk = false;
-  try {
-    const resp = await fetch('cv-data.json');
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    cvData = await resp.json();
-    document.getElementById('h-name').textContent =
-      `${cvData.name.first} ${cvData.name.last}`;
-    document.getElementById('h-tagline').textContent = cvData.tagline;
-    buildSidebar();
-    showSection(0);
-    jsonOk = true;
-  } catch (e) {
-    console.warn('Portfolio data unavailable:', e.message);
-    const btn = document.querySelector('[data-mode="portfolio"]');
-    btn.disabled = true;
-    btn.title = 'Portfolio data not found (run generator: ./gradlew run)';
-  }
+function init() {
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const open = () => showSection(Number(item.dataset.index));
+    item.addEventListener('click', open);
+    item.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
 
-  setMode(jsonOk ? 'portfolio' : 'pdf');
+  document.getElementById('menu-btn').addEventListener('click', toggleSidebar);
+  document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+  document.getElementById('prev-btn').addEventListener('click', () => navigate(-1));
+  document.getElementById('next-btn').addEventListener('click', () => navigate(1));
+  document.getElementById('zoom-out').addEventListener('click', () => zoomChange(-1));
+  document.getElementById('zoom-in').addEventListener('click', () => zoomChange(1));
+  document.querySelectorAll('[data-mode]').forEach(button =>
+    button.addEventListener('click', () => setMode(button.dataset.mode)));
+
+  showSection(0);
+  setMode('portfolio');
   initPDF();
 }
 
-window.setMode = function(m) {
-  mode = m;
-  document.getElementById('pdf-view').classList.toggle('hidden', m !== 'pdf');
-  document.getElementById('portfolio-view').classList.toggle('hidden', m !== 'portfolio');
-  const zc = document.getElementById('zoom-controls');
-  zc.style.display = m === 'pdf' ? 'flex' : 'none';
-  document.querySelectorAll('[data-mode]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === m);
-  });
-  if (m === 'pdf' && pdfDoc && !pdfRendered) renderPDFNow();
+window.showSection = function(index) {
+  const sections = document.querySelectorAll('.portfolio-section');
+  if (index < 0 || index >= sections.length) return;
+
+  currentSection = index;
+  closeSidebar();
+  document.querySelectorAll('.nav-item').forEach((item, i) =>
+    item.classList.toggle('active', i === index));
+  sections.forEach((section, i) => { section.hidden = i !== index; });
+
+  const display = document.getElementById('section-display');
+  display.scrollTop = 0;
+  document.getElementById('prev-btn').disabled = index === 0;
+  document.getElementById('next-btn').disabled = index === sections.length - 1;
+  document.getElementById('nav-indicator').textContent =
+    `${index + 1} / ${sections.length}  ·  ${sections[index].dataset.title}`;
 };
 
-function esc(s) {
-  return String(s)
+window.navigate = function(direction) {
+  showSection(currentSection + direction);
+};
+
+window.setMode = function(nextMode) {
+  mode = nextMode;
+  document.getElementById('pdf-view').classList.toggle('hidden', mode !== 'pdf');
+  document.getElementById('portfolio-view').classList.toggle('hidden', mode !== 'portfolio');
+  document.getElementById('zoom-controls').style.display = mode === 'pdf' ? 'flex' : 'none';
+  document.querySelectorAll('[data-mode]').forEach(button =>
+    button.classList.toggle('active', button.dataset.mode === mode));
+  if (mode === 'pdf' && pdfDoc && !pdfRendered) renderPDFNow();
+};
+
+window.toggleSidebar = function() {
+  const sidebar = document.getElementById('sidebar');
+  const open = sidebar.classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('visible', open);
+};
+
+window.closeSidebar = function() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('visible');
+};
+
+document.addEventListener('keydown', event => {
+  if (mode !== 'portfolio') return;
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') navigate(-1);
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') navigate(1);
+});
+
+function esc(value) {
+  return String(value)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-function plainTitle(t) {
-  const d = document.createElement('div');
-  d.innerHTML = t;
-  return d.textContent;
 }

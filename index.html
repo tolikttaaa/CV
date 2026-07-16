@@ -7,58 +7,261 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div id="sidebar-overlay"></div>
 
   <header id="app-header">
     <div class="h-left">
-      <button class="menu-btn" id="menu-btn" onclick="toggleSidebar()" title="Sections">
+      <button class="menu-btn" id="menu-btn" type="button" title="Sections">
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="h-identity">
         <h1 id="h-name">Anatolii Anishchenko</h1>
-        <p  id="h-tagline">Java / Kotlin Software Engineer</p>
+        <p id="h-tagline">Java/Kotlin Software Engineer</p>
       </div>
     </div>
     <div class="view-toggle">
-      <button class="toggle-btn" data-mode="portfolio" onclick="setMode('portfolio')">Portfolio</button>
-      <button class="toggle-btn" data-mode="pdf"       onclick="setMode('pdf')">CV</button>
+      <button class="toggle-btn" type="button" data-mode="portfolio">Portfolio</button>
+      <button class="toggle-btn" type="button" data-mode="pdf">CV</button>
     </div>
     <div class="h-actions">
       <span id="zoom-controls" style="display:none;align-items:center;gap:.35rem">
-        <button class="zoom-btn" id="zoom-out" onclick="zoomChange(-1)" title="Zoom out">−</button>
-        <span   class="zoom-label" id="zoom-label">100%</span>
-        <button class="zoom-btn" id="zoom-in"  onclick="zoomChange(1)"  title="Zoom in">+</button>
+        <button class="zoom-btn" id="zoom-out" type="button" title="Zoom out">−</button>
+        <span class="zoom-label" id="zoom-label">100%</span>
+        <button class="zoom-btn" id="zoom-in" type="button" title="Zoom in">+</button>
       </span>
-      <a class="download-btn" href="cv.pdf" download="AnishchenkoAA_CV.pdf">
+      <a class="download-btn" href="cv.pdf" download="CV.pdf">
         <i class="fa-solid fa-download"></i><span class="btn-label">PDF</span>
       </a>
     </div>
   </header>
 
-  <!-- ── PDF view ─────────────────────────────────────────────────────────── -->
   <div id="pdf-view" class="view-panel hidden">
     <div id="viewer-container">
       <span id="pdf-loading">Loading…</span>
     </div>
   </div>
 
-  <!-- ── Portfolio view ───────────────────────────────────────────────────── -->
   <div id="portfolio-view" class="view-panel hidden">
-    <aside id="sidebar"></aside>
+    <aside id="sidebar">
+      <nav class="sb-nav">
+        <div class="sb-nav-label">Sections</div>
+        <div class="nav-item active" data-index="0" role="button" tabindex="0">
+  <i class="fa-solid fa-user"></i>Summary
+</div>
+<div class="nav-item" data-index="1" role="button" tabindex="0">
+  <i class="fa-solid fa-briefcase"></i>Experience
+</div>
+<div class="nav-item" data-index="2" role="button" tabindex="0">
+  <i class="fa-solid fa-bolt"></i>Skills &amp; Abilities
+</div>
+<div class="nav-item" data-index="3" role="button" tabindex="0">
+  <i class="fa-solid fa-laptop-code"></i>Personal Projects
+</div>
+<div class="nav-item" data-index="4" role="button" tabindex="0">
+  <i class="fa-solid fa-graduation-cap"></i>Teaching &amp; Mentoring
+</div>
+<div class="nav-item" data-index="5" role="button" tabindex="0">
+  <i class="fa-solid fa-book-open"></i>Education
+</div>
+<div class="nav-item" data-index="6" role="button" tabindex="0">
+  <i class="fa-solid fa-quote-left"></i>References
+</div>
+      </nav>
+    </aside>
     <div id="content-area">
-      <div id="section-display"></div>
+      <div id="section-display">
+        <section class="portfolio-section" data-title="Summary">
+  <div class="summary-header">
+  <div class="summary-header-name">Anatolii Anishchenko</div>
+  <div class="summary-header-tagline">Java/Kotlin Software Engineer</div>
+</div>
+<div class="summary-grid">
+  <div class="contact-list"><div class="contact-item"><i class="fa-solid fa-phone"></i><span>+357 974 33 973</span></div><a class="contact-item" href="https://t.me/ttaaa_work" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>t.me/ttaaa_work</span></a><a class="contact-item" href="mailto:tolik.ttaaa@gmail.com" target="_blank" rel="noopener"><i class="fa-solid fa-envelope"></i><span>tolik.ttaaa@gmail.com</span></a><a class="contact-item" href="https://www.linkedin.com/in/ttaaa" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i><span>linkedin.com/in/ttaaa</span></a><a class="contact-item" href="https://github.com/tolikttaaa" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i><span>github.com/tolikttaaa</span></a><a class="contact-item" href="https://leetcode.com/u/ttaaa" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i><span>leetcode.com/u/ttaaa</span></a><div class="contact-item"><i class="fa-solid fa-location-dot"></i><span>Cyprus, Limassol</span></div></div>
+  <div class="summary-box">Software Engineer with a strong background in backend development, test automation, and system architecture. Skilled in Kotlin and Java, with hands-on expertise in building scalable microservices using Spring Framework, PostgreSQL, MongoDB, Kubernetes, and AWS. Proven track record of building reliable, high-performance systems in the fintech and cloud infrastructure domains. Worked in multiple teams at <strong>Azul</strong>, <strong>Yandex</strong>, and <strong>Tinkoff</strong>, contributing to mission-critical services, CI/CD pipelines, monitoring dashboards, and automation frameworks. Passionate about clean code, maintainable architecture, and continuous learning.</div>
+  <img class="summary-photo" src="photo.jpg" alt="Anatolii Anishchenko"
+     onerror="this.style.display='none'">
+</div>
+</section>
+<section class="portfolio-section" data-title="Experience" hidden>
+  <div class="sec-title"><i class="fa-solid fa-briefcase"></i>Experience</div><div class="work-entries"><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">Backend Software Engineer</div>
+      <div class="work-sub"><a href="https://www.azul.com/" target="_blank" rel="noopener"><strong>Azul</strong></a> &middot; Limassol, Cyprus</div>
+    </div>
+    <div class="work-dates">January 2025 – June 2026</div>
+  </div>
+  <div class="work-desc">Designed and delivered multiple backend services for vulnerability data processing and enrichment within a JVM ecosystem, including AI-assisted detection of impacted code elements and a centralized CPE/CVE processing pipeline. Established system observability with Grafana to ensure reliability and performance at scale. <ul><li>Average CVE and CPE ingestion time <strong>decreased from 24h to 8h</strong>, ensuring compliance with a 24-hour security SLA.</li><li>Class/Method-level vulnerability coverage <strong>improved from 15% to 75%</strong> through automation of data collection and analysis.</li><li>Migrated the system from a monolithic to a microservices architecture, enabling independent scaling of components and improving overall system flexibility and maintainability.</li></ul></div>
+  <div class="tags"><span class="tag">Kotlin</span><span class="tag">Java</span><span class="tag">AWS</span><span class="tag">Kubernetes</span><span class="tag">PostgreSQL</span><span class="tag">MongoDB</span><span class="tag">Spring Framework</span><span class="tag">Spring Batch</span><span class="tag">Kafka</span><span class="tag">Gradle</span><span class="tag">Grafana</span><span class="tag">Prometheus</span><span class="tag">GitLab CI</span><span class="tag">JUnit 5</span><span class="tag">Mockito</span><span class="tag">Allure TestOps</span></div>
+</div><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">Software Engineer in Test</div>
+      <div class="work-sub"><a href="https://www.azul.com/" target="_blank" rel="noopener"><strong>Azul</strong></a> &middot; Yerevan, Armenia (relocation to Cyprus)</div>
+    </div>
+    <div class="work-dates">April 2023 – January 2025</div>
+  </div>
+  <div class="work-desc">Improved the quality, reliability, and performance of the automated testing pipeline by introducing structured test planning, expanding automation coverage, and optimizing test execution strategy. Collaborated with developers and product managers to define comprehensive test plans, implemented automated tests for new features, and refactored existing test code to improve maintainability and scalability. <ul><li>Automated test coverage <strong>increased from 60% to 80%</strong>, improving overall product quality and reducing regression risks.</li><li>Flaky test rate <strong>reduced from 30% to &lt;1%</strong>, significantly increasing test reliability and developer trust in CI results.</li><li>Average pipeline test execution time <strong>decreased from 2 hours to 1 hour</strong> by splitting tests by scope and executing only impacted tests per pipeline.</li></ul></div>
+  <div class="tags"><span class="tag">Java</span><span class="tag">Allure TestOps</span><span class="tag">JUnit 5</span><span class="tag">Spring Framework</span><span class="tag">Selenium</span><span class="tag">Selenide</span><span class="tag">PostgreSQL</span><span class="tag">jtreg</span><span class="tag">Jenkins</span><span class="tag">GitLab CI</span></div>
+</div><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">Java Backend Developer</div>
+      <div class="work-sub"><a href="https://yandex.com/company" target="_blank" rel="noopener"><strong>Yandex</strong></a> &middot; Yerevan, Armenia</div>
+    </div>
+    <div class="work-dates">January 2023 – April 2023</div>
+  </div>
+  <div class="work-desc">Implemented a billing service designed for the creation and management of promotional offers and subscriptions. The system enabled quick and flexible setup of new promotions with configurable conditions. The system allows non-engineering teams to independently create and manage offers without requiring code changes or database migrations. <ul><li>Time-to-market for new promotions <strong>reduced from days to hours</strong>, eliminating dependency on engineering team.</li></ul></div>
+  <div class="tags"><span class="tag">Java</span><span class="tag">PostgreSQL</span><span class="tag">Spring Framework</span><span class="tag">Python</span><span class="tag">JUnit 5</span><span class="tag">Prometheus</span></div>
+</div><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">Kotlin Backend Developer</div>
+      <div class="work-sub"><a href="https://www.tinkoff.ru/software/" target="_blank" rel="noopener"><strong>Tinkoff</strong></a> &middot; St.Petersburg, Russia (relocation to Armenia)</div>
+    </div>
+    <div class="work-dates">May 2021 – January 2023</div>
+  </div>
+  <div class="work-desc">Designed and delivered multiple high-load backend services and infrastructure components, including workflow orchestration, low-latency data services, distributed data migration, and internal execution frameworks. Focused on scalability, reliability, and automation across distributed systems. <ul><li>Enabled stable handling of <strong>10k+ RPS</strong> by building a customer data service, establishing a single source of truth for multiple internal platforms.</li><li>Reduced manual data migration effort and automated large-scale transfers, processing millions of records across PostgreSQL and Oracle systems.</li><li>Test coverage <strong>increased by 50%</strong> and regression cycle time <strong>reduced by 70%</strong> by introducing an automated testing framework integrated into CI/CD pipelines.</li></ul></div>
+  <div class="tags"><span class="tag">Kotlin</span><span class="tag">PostgreSQL</span><span class="tag">Oracle</span><span class="tag">Spring Framework</span><span class="tag">Kafka</span><span class="tag">Camunda</span><span class="tag">Quartz</span><span class="tag">Swagger</span><span class="tag">Allure TestOps</span><span class="tag">JUnit 5</span><span class="tag">WSDL</span><span class="tag">Prometheus</span><span class="tag">Grafana</span></div>
+</div></div>
+</section>
+<section class="portfolio-section" data-title="Skills &amp; Abilities" hidden>
+  <div class="sec-title"><i class="fa-solid fa-bolt"></i>Skills &amp; Abilities</div><div class="skills-table"><div class="skill-row">
+  <div class="skill-cat">Communication</div>
+  <div class="skill-val">English (C1), Russian (native)</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Programming Languages</div>
+  <div class="skill-val">Kotlin, Java, Python, Bash, C, C++</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Frameworks &amp; Libraries</div>
+  <div class="skill-val">Spring Framework, JUnit, Mockito, Allure TestOps, Swagger, JaCoCo, Gradle, Maven, Quartz, Prometheus, Micrometer, Selenium, Selenide, TestContainers, WireMock</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Databases &amp; Storage</div>
+  <div class="skill-val">PostgreSQL, MongoDB, AWS RDS, S3</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Messaging &amp; Streaming</div>
+  <div class="skill-val">Apache Kafka, Apache Artemis, AWS SQS</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Cloud &amp; Infrastructure</div>
+  <div class="skill-val">AWS, Kubernetes, Docker, Helm</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Protocols &amp; Formats</div>
+  <div class="skill-val">JSON, YAML, Protobuf, XML, WSDL, REST</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Version Control</div>
+  <div class="skill-val">Git, SVN</div>
+</div><div class="skill-row">
+  <div class="skill-cat">CI/CD &amp; DevOps Tools</div>
+  <div class="skill-val">GitLab CI, Jenkins</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Monitoring &amp; Observability</div>
+  <div class="skill-val">Grafana, Prometheus, Loki, Micrometer</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Work Process</div>
+  <div class="skill-val">Jira, Confluence, Scrum, Kanban, Agile, GitLab, Bitbucket</div>
+</div><div class="skill-row">
+  <div class="skill-cat">IDE &amp; Tools</div>
+  <div class="skill-val">IntelliJ IDEA, PyCharm, DataGrip, Postman</div>
+</div><div class="skill-row">
+  <div class="skill-cat">Architecture &amp; Principles</div>
+  <div class="skill-val">Microservices, Event-driven systems, Clean Architecture, Test Driven Development (TDD), Software Design, System Architecture</div>
+</div><div class="skill-row">
+  <div class="skill-cat">General Knowledge</div>
+  <div class="skill-val">Programming, Computer Science, Algorithms, Data Structures, Math &amp; Geometry, Teaching, Mentoring</div>
+</div></div>
+</section>
+<section class="portfolio-section" data-title="Personal Projects" hidden>
+  <div class="sec-title"><i class="fa-solid fa-laptop-code"></i>Personal Projects</div><div class="project-entries"><div class="project-card">
+  <div class="project-header">
+    <div class="project-name">System of retryable chain tasks</div>
+    <div class="work-dates">2022</div>
+  </div>
+  <div class="project-sub"><a href="https://www.tinkoff.ru/software/" target="_blank" rel="noopener"><strong>Tinkoff</strong></a></div>
+  <div class="work-desc">Implemented a Java Spring library for delayed and retryable execution of task chains (similar to <strong>Quartz</strong>), supporting configurable retries, delays, metrics, and REST-based task management. <ul><li>Job success rate <strong>increased to 99.9%</strong> and recovery time <strong>reduced by 50%</strong>.</li></ul></div>
+  <div class="tags"><span class="tag">Kotlin</span><span class="tag">Spring</span><span class="tag">Task Scheduler</span><span class="tag">Quartz</span></div>
+</div></div>
+</section>
+<section class="portfolio-section" data-title="Teaching &amp; Mentoring" hidden>
+  <div class="sec-title"><i class="fa-solid fa-graduation-cap"></i>Teaching &amp; Mentoring</div><div class="work-entries"><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">University Teaching Assistant</div>
+      <div class="work-sub"><a href="https://en.itmo.ru/" target="_blank" rel="noopener"><strong>ITMO University</strong></a> &middot; St.Petersburg, Russia</div>
+    </div>
+    <div class="work-dates">September 2020 – May 2023</div>
+  </div>
+  <div class="work-desc">Contributed to the development of laboratory assignments and teaching materials for the <strong>Information Technology</strong> course. Oversaw and assessed laboratory work submitted by undergraduate students.</div>
+  <div class="tags"><span class="tag">Python</span><span class="tag">Java</span><span class="tag">Programming</span><span class="tag">Computer Science</span><span class="tag">Algorithms</span><span class="tag">Data Structures</span></div>
+</div><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">Olympiad Programming Teacher</div>
+      <div class="work-sub"><a href="https://en.letovo.ru/" target="_blank" rel="noopener"><strong>Letovo School</strong></a> &middot; Moscow, Russia</div>
+    </div>
+    <div class="work-dates">January 2020, May 2019</div>
+  </div>
+  <div class="work-desc">Taught at the School of Olympiad Programming at Letovo School. Prepared and delivered lectures on <strong>Algorithms</strong> and <strong>Data Structures</strong> to 7th–8th grade high school students.</div>
+  <div class="tags"><span class="tag">Python</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">Programming</span><span class="tag">Algorithms</span><span class="tag">Data Structures</span></div>
+</div><div class="work-card">
+  <div class="work-header">
+    <div>
+      <div class="work-role">Summer Computer Science School Teacher</div>
+      <div class="work-sub"><a href="https://univer-sum.ru" target="_blank" rel="noopener"><strong>UniverSum</strong></a> &middot; Munich, Germany</div>
+    </div>
+    <div class="work-dates">May 2018</div>
+  </div>
+  <div class="work-desc">Taught at the Summer Computer Science School UniverSum for Russian students. Prepared and delivered lectures on <strong>Algorithms</strong>, <strong>Augmented and Virtual Reality</strong> to 7th–11th grade high school students.</div>
+  <div class="tags"><span class="tag">Python</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">Programming</span><span class="tag">Algorithms</span><span class="tag">Data Structures</span><span class="tag">Augmented and Virtual Reality</span></div>
+</div></div>
+</section>
+<section class="portfolio-section" data-title="Education" hidden>
+  <div class="sec-title"><i class="fa-solid fa-book-open"></i>Education</div><div class="edu-entries"><div class="edu-entry">
+  <div class="edu-years">2018 – 2022</div>
+  <div class="edu-desc">Bachelor’s Degree in Software Engineering and Computer Technologies: <a href="https://en.itmo.ru/" target="_blank" rel="noopener"><strong>ITMO University</strong></a>, St.Petersburg, Russia</div>
+</div><div class="edu-entry">
+  <div class="edu-years">2014 – 2018</div>
+  <div class="edu-desc">complete secondary: <a href="https://www.school.ioffe.ru/readings/pths_about_en.html" target="_blank" rel="noopener"><strong>Physical Technical High School (PTHS)</strong></a>, St.Petersburg, Russia</div>
+</div><div class="edu-entry">
+  <div class="edu-years">2018</div>
+  <div class="edu-desc">school exchange program (1 month): <a href="https://www.imsa.edu/" target="_blank" rel="noopener"><strong>Illinois Mathematical and Science Academy (IMSA)</strong></a>, Illinois, USA</div>
+</div></div>
+</section>
+<section class="portfolio-section" data-title="References" hidden>
+  <div class="sec-title"><i class="fa-solid fa-quote-left"></i>References</div><div class="ref-grid"><div class="ref-card">
+  <div class="ref-name">Evgeny Gil</div>
+  <div class="ref-detail">
+    <div>Manager, Software Engineer</div>
+    <div><a href="https://www.azul.com/" target="_blank" rel="noopener">Azul</a> · 2025 - 2026</div>
+    <div><a href="mailto:egil@azul.com">egil@azul.com</a></div>
+  </div>
+</div><div class="ref-card">
+  <div class="ref-name">Sergey Grinev</div>
+  <div class="ref-detail">
+    <div>Senior Manager, QA Engineer</div>
+    <div><a href="https://www.azul.com/" target="_blank" rel="noopener">Azul</a> · 2023 - 2024</div>
+    <div><a href="mailto:sergey.grinev@azul.com">sergey.grinev@azul.com</a></div>
+  </div>
+</div><div class="ref-card">
+  <div class="ref-name">Sergii Kurstak</div>
+  <div class="ref-detail">
+    <div>Senior Director, Engineering</div>
+    <div><a href="https://www.azul.com/" target="_blank" rel="noopener">Azul</a> · 2024 - 2026</div>
+    <div><a href="mailto:sergii@azul.com">sergii@azul.com</a></div>
+  </div>
+</div></div>
+</section>
+      </div>
       <div id="section-nav-bar">
-        <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">
+        <button class="nav-btn" id="prev-btn" type="button">
           <i class="fa-solid fa-chevron-left"></i> Previous
         </button>
         <span class="nav-indicator" id="nav-indicator"></span>
-        <button class="nav-btn" id="next-btn" onclick="navigate(1)">
+        <button class="nav-btn" id="next-btn" type="button">
           Next <i class="fa-solid fa-chevron-right"></i>
         </button>
       </div>
@@ -71,9 +274,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="app.js"></script>
-  <script src="portfolio.js"></script>
   <script src="pdf-viewer.js"></script>
   <script>init();</script>
-
 </body>
 </html>
