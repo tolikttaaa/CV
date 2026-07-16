@@ -13,8 +13,8 @@ import cv.model.Plain
 import cv.model.RichText
 
 /**
- * Converts inline and block markup to the HTML fragments embedded in
- * `cv-data.json` (rendered by the web app via `innerHTML`).
+ * Converts inline and block markup to safe HTML fragments embedded directly
+ * in the generated portfolio page.
  */
 internal object HtmlText {
 

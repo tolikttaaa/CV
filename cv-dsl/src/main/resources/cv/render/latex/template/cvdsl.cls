@@ -163,7 +163,7 @@
 \newcommand*{\smartphone}[1]{\socialtext{\mobileSymbol}{#1}}
 \newcommand*{\email}     [1]{\sociallink{\mailSymbol}{mailto:#1}{#1}}
 \newcommand*{\linkedin}  [1]{\sociallink{\linkedinSymbol}{https://www.linkedin.com/in/#1}{linkedin.com/in/#1}}
-\newcommand*{\github}    [1]{\sociallink{\githubSymbol}{https://www.github.com/#1}{github.com/#1}}
+\newcommand*{\github}    [1]{\sociallink{\githubSymbol}{https://github.com/#1}{github.com/#1}}
 \newcommand*{\telegram}  [1]{\sociallink{\chatSymbol}{https://t.me/#1}{t.me/#1}}
 \newcommand*{\leetcode}  [1]{\sociallink{\leetcodeSymbol}{https://leetcode.com/u/#1}{leetcode.com/u/#1}}
 

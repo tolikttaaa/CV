@@ -1,0 +1,10 @@
+# Versions owned by the standalone cv-dsl library and Gradle plugin build.
+[versions]
+java = "21"
+kotlin = "2.2.20"
+detekt = "2.0.0-alpha.5"
+cv-dsl = "0.1.0-SNAPSHOT"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }

@@ -21,7 +21,7 @@ import cv.model.WorksSection
  * Every section method takes:
  *  - `title` — the heading in the PDF,
  *  - `icon` — the FontAwesome command for `\sectionTitle` (e.g. `"faSuitcase"`),
- *  - `id` — the LaTeX file / JSON section identifier (defaulted where unambiguous),
+ *  - `id` — the stable LaTeX file / web navigation identifier (defaulted where unambiguous),
  *  - `webTitle` — the heading on the web page, when it differs from `title`.
  */
 @CvDsl

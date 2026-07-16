@@ -28,8 +28,11 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Generate LaTeX sources and portfolio data
-        run: ./gradlew run
+      - name: Run checks
+        run: ./gradlew check
+
+      - name: Generate LaTeX sources and portfolio site
+        run: ./gradlew generateLatex generateWeb
 
       - name: Compile LaTeX (LuaLaTeX)
         uses: xu-cheng/latex-action@v3
@@ -40,10 +43,8 @@ jobs:
 
       - name: Prepare Pages content
         run: |
-          cp -r web build/site
+          cp -r build/web build/site
           cp build/latex/cv.pdf build/site/cv.pdf
-          cp build/latex/photo.jpg build/site/photo.jpg
-          cp build/cv-data.json build/site/cv-data.json
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

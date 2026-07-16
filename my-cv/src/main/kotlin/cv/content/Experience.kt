@@ -4,6 +4,7 @@ import cv.dictionaries.Companies
 import cv.dsl.CvBuilder
 
 /** The "Experience" section: employment history, most recent first. */
+@Suppress("LongMethod") // Declarative CV content is intentionally kept as one chronological section.
 internal fun CvBuilder.experienceSection() = experience(title = "Experience", icon = "faSuitcase", id = "experience") {
     work(
         role = "Backend Software Engineer",

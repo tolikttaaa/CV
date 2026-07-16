@@ -5,6 +5,7 @@ import cv.dictionaries.Universities
 import cv.dsl.CvBuilder
 
 /** The "Teaching and Mentoring" section: teaching positions, most recent first. */
+@Suppress("LongMethod") // Declarative CV content is intentionally kept as one chronological section.
 internal fun CvBuilder.teachingSection() = experience(
     title = "Teaching and Mentoring",
     icon = "faGraduationCap",
