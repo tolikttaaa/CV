@@ -1,9 +1,8 @@
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.extensions.DetektExtension
 
-// Root coordinator for the personal content build and the included cv-dsl
-// build. Versions live in gradle/libs.versions.toml; reusable CV tasks are
-// supplied by cv-dsl's Gradle plugin rather than implemented here.
+// Root coordinator for the personal content build. Build-tool versions live in
+// gradle/libs.versions.toml; reusable CV tasks come from the released cv-dsl.
 plugins {
     base
     alias(libs.plugins.kotlin.jvm) apply false
@@ -17,6 +16,7 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven("https://jitpack.io")
     }
 
     extensions.configure<DetektExtension> {
@@ -37,16 +37,12 @@ subprojects {
     }
 }
 
-// Composite builds are isolated by Gradle, so the root verification lifecycle
-// explicitly includes the reusable cv-dsl build as well as the content module.
 tasks.named("check") {
     dependsOn(":my-cv:check")
-    dependsOn(gradle.includedBuild("cv-dsl").task(":check"))
 }
 
 tasks.register("detekt") {
     group = "verification"
-    description = "Runs Detekt in my-cv and the included cv-dsl build."
+    description = "Runs Detekt on the personal CV content module."
     dependsOn(":my-cv:detekt")
-    dependsOn(gradle.includedBuild("cv-dsl").task(":detekt"))
 }

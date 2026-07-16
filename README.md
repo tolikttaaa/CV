@@ -12,22 +12,8 @@ and deploys it to GitHub Pages.
 ## Project layout
 
 ```text
-├── gradle/libs.versions.toml       # Build-tool and artifact versions
-├── cv-dsl/                         # Standalone included build
-│   ├── settings.gradle.kts         # Independent build identity and repositories
-│   ├── gradle/libs.versions.toml   # Versions owned by the reusable build
-│   └── src/main/
-│       ├── kotlin/cv/
-│       │   ├── gradle/             # Reusable cv.dsl.generation plugin
-│       │   ├── generation/         # Reusable command-line generation pipeline
-│       │   ├── model/              # Immutable CV model
-│       │   ├── dsl/                # Type-safe cv { ... } builders
-│       │   └── render/
-│       │       ├── latex/          # LaTeX renderer implementation
-│       │       └── web/            # Static HTML renderer implementation
-│       └── resources/cv/render/
-│           ├── latex/template/     # Document class and local fonts
-│           └── web/template/       # CSS, JavaScript and favicon
+├── gradle.properties               # Pinned cv-dsl release
+├── gradle/libs.versions.toml       # Build-tool versions
 ├── my-cv/                          # This CV's content and generation entry point
 │   └── src/main/
 │       ├── kotlin/cv/
@@ -38,10 +24,10 @@ and deploys it to GitHub Pages.
 └── .github/workflows/              # Verification and Pages deployment
 ```
 
-`cv-dsl` contains no personal CV content. The root build includes it through
-`pluginManagement` for the generation plugin and as a normal composite build
-for dependency substitution of `cv.dsl:cv-dsl`. `my-cv` therefore uses the same
-contracts it would use with published artifacts.
+The reusable implementation lives in the separate
+[`tolikttaaa/cv-dsl`](https://github.com/tolikttaaa/cv-dsl) repository. This
+project consumes its tagged JitPack artifact for both the Gradle generation
+plugin and the application API; only personal content remains here.
 
 ## Rendering architecture
 
@@ -80,32 +66,31 @@ contract. If a required renderer is missing, compilation fails. Web renderers
 receive `WebRenderContext`; LaTeX renderers use `Unit` because section rendering
 does not require shared state.
 
-### Adding a model element
-
-When introducing a new renderable element:
-
-1. Add the immutable model and its DSL builder operation.
-2. Add its `ElementRenderer` property to `RendererBundle`.
-3. Implement and register it in both renderer bundles.
-4. Add renderer-focused tests or compare generated output where appropriate.
-
-For a new section type, also extend `SectionRenderer` and its exhaustive
-`Section.renderWith` dispatch. Kotlin then forces both formats to support it.
+Library architecture, extension rules and required test coverage are documented
+in the standalone project's
+[`CONTRIBUTING.md`](https://github.com/tolikttaaa/cv-dsl/blob/main/CONTRIBUTING.md)
+and [`architecture.md`](https://github.com/tolikttaaa/cv-dsl/blob/main/docs/architecture.md).
 
 ## Gradle generation plugin
 
 `cv-dsl` defines the `cv.dsl.generation` plugin alongside the model and
-renderers. A consumer applies the plugin and depends on the library:
+renderers. This project loads both from one tagged JitPack artifact:
 
 ```kotlin
+buildscript {
+    repositories { maven("https://jitpack.io") }
+    dependencies { classpath("com.github.tolikttaaa:cv-dsl:<tag>") }
+}
+
 plugins {
     kotlin("jvm")
     application
-    id("cv.dsl.generation")
 }
 
+apply(plugin = "cv.dsl.generation")
+
 dependencies {
-    implementation("cv.dsl:cv-dsl:<version>")
+    implementation("com.github.tolikttaaa:cv-dsl:<tag>")
 }
 
 application {
@@ -225,17 +210,10 @@ The preview server uses the JDK's `jwebserver`, records its PID in
 
 ## Version management
 
-Each Gradle build owns an independent version catalog:
-
-- `gradle/libs.versions.toml` configures the root application build and the
-  `cv-dsl` version consumed by `my-cv`;
-- `cv-dsl/gradle/libs.versions.toml` configures the reusable library/plugin
-  build and its published artifact version.
-
-Build scripts consume catalog aliases and do not declare plugin or toolchain
-versions directly. Composite dependency substitution ignores the requested
-library version locally; when publishing, update the consumer version only when
-`my-cv` is ready to adopt that release.
+`gradle.properties` pins one `cvDslVersion` tag for both the build-script plugin
+classpath and the application dependency. Update that property only after the
+standalone repository's release CI is green and its immutable JitPack artifact
+is available. Build-tool versions remain in `gradle/libs.versions.toml`.
 
 Detekt runs with its default rule set, reports in Checkstyle, HTML, SARIF and
 Markdown formats, and is part of every `check` invocation. Narrow suppressions
